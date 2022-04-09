@@ -13,7 +13,8 @@ os.chdir(file_path)
 
 from game import GameView
 
-
+#character selection
+from character_selection import CharacterSelection
 
 WIDTH = 800
 HEIGHT = 600
@@ -28,7 +29,7 @@ class MenuView(arcade.View):
     def on_draw(self):
         self.clear()
 
-        self.background = arcade.load_texture("big_tree.png", x=800.0, y=800.0, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+        self.background = arcade.load_texture("assets/big_tree.png", x=800.0, y=800.0, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
@@ -42,14 +43,16 @@ class MenuView(arcade.View):
                          font_name= "Comic Sans MS",)
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        instructions_view = GameView()
-        instructions_view.setup()
-        self.window.show_view(instructions_view)
+        character_selection_view = CharacterSelection()
+        character_selection_view.setup()
+        self.window.show_view(character_selection_view)
 
 def main():
     window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
     window.total_score = 0
     menu_view = MenuView()
+    # character_selection_view = CharacterSelection()
+    # character_selection_view.setup()
     window.show_view(menu_view)
     arcade.run()
 

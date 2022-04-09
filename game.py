@@ -18,15 +18,28 @@ If Python and Arcade are installed, this example can be run from the command lin
 python -m arcade.examples.view_instructions_and_game_over.py
 """
 import arcade
+from entity import Player
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Platformer"
 TILE_SPRITE_SCALING = 0.5
-PLAYER_SCALING = 0.6
 
+LAYER_NAME_MOVING_PLATFORMS = "Moving Platforms"
+LAYER_NAME_PLATFORMS = "Platforms"
+LAYER_NAME_COINS = "Coins"
+LAYER_NAME_BACKGROUND = "Background"
+LAYER_NAME_LADDERS = "Ladders"
+LAYER_NAME_PLAYER = "Player"
+LAYER_NAME_ENEMIES = "Enemies"
+LAYER_NAME_BULLETS = "Bullets"
+PLAYER_SCALING = 0.6
+BULLET_SPEED = 12
+BULLET_DAMAGE = 25
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+LAYER_NAME_BULLETS = "Bullets"
+
 SCREEN_TITLE = "Sprite Tiled Map with Levels Example"
 SPRITE_PIXEL_SIZE = 128
 GRID_PIXEL_SIZE = SPRITE_PIXEL_SIZE * TILE_SPRITE_SCALING
@@ -34,11 +47,17 @@ GRID_PIXEL_SIZE = SPRITE_PIXEL_SIZE * TILE_SPRITE_SCALING
 CHARACTER_SCALING = 1
 TILE_SCALING = 0.5
 COIN_SCALING = 0.5
+SPRITE_SCALING_LASER = 0.8
+SHOOT_SPEED = 15
+
 
 # Movement speed of player, in pixels per frame
 PLAYER_MOVEMENT_SPEED = 5
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
+# Constants used to track if the player is facing left or right
+RIGHT_FACING = 0
+LEFT_FACING = 1
 import arcade
 import random
 import os
@@ -74,47 +93,8 @@ def text_drawer(self, text, x_coord, y_coord, font_size = 30, font_name = "Comic
 
 
 
-class Player(arcade.Sprite):
-
-    """ Player Class """
-
-    def update(self):
-
-        """ Move the player """
-
-        # Move player.
-
-        # Remove these lines if physics engine is moving player.
-
-        self.center_x += self.change_x
-
-        self.center_y += self.change_y
-
-
-
-        # Check for out-of-bounds
-
-        if self.left < 0:
-
-            self.left = 0
-
-        elif self.right > SCREEN_WIDTH - 1:
-
-            self.right = SCREEN_WIDTH - 1
-
-
-
-        if self.bottom < 0:
-
-            self.bottom = 0
-
-        elif self.top > SCREEN_HEIGHT - 1:
-
-            self.top = SCREEN_HEIGHT - 1
-
-
 class GameView(arcade.View):
-    def __init__(self):
+    def __init__(self, playerType):
         super().__init__()
 
         # Our Scene Object
@@ -122,7 +102,9 @@ class GameView(arcade.View):
 
         # Separate variable that holds the player sprite
         self.player_sprite = None
-
+        
+        self.player_type = playerType
+        print('in init, playerType: ' + str(self.player_type))
         # Our physics engine
         self.physics_engine = None
 
@@ -146,6 +128,7 @@ class GameView(arcade.View):
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
         map_name = ":resources:tiled_maps/map.json"
+        #"/Users/sander/map.tmx"
         layer_options = {
             "Platforms": {
                 "use_spatial_hash": True,
@@ -154,7 +137,7 @@ class GameView(arcade.View):
         # Set up the Game Camera
         self.camera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-        self.background = arcade.load_texture("big_tree.png")
+        self.background = arcade.load_texture("assets/big_tree.png")
 
         # Set up the GUI Camera
 
@@ -179,14 +162,11 @@ class GameView(arcade.View):
         # self.scene = arcade.Scene()
 
         # Set up the player, specifically placing it at these coordinates.
-        image_source = "marshie_blue.png"
-        self.player_sprite = arcade.Sprite(image_source, 0.02)
+        player_types = {'Blue': 'assets/marshie_blue.png', 'Red': 'assets/marshie_red.png', 'Green': 'assets/marshie_green.png'}
+        self.player_sprite = Player(player_types[self.player_type], 0.02)
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 96
         self.scene.add_sprite("Player", self.player_sprite)
-
-
-
 
         # Use a loop to place some coins for our character to pick up
         for x in range(128, 1250, 256):
@@ -213,6 +193,15 @@ class GameView(arcade.View):
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Platforms"]
         )
+
+        # BULLET
+        self.scene.add_sprite_list(LAYER_NAME_BULLETS)
+        # Shooting mechanics
+        self.can_shoot = True
+        self.shoot_timer = 0
+        self.shoot_pressed = False
+
+
 
     def on_draw(self):
         """Render the screen."""
@@ -252,7 +241,8 @@ class GameView(arcade.View):
             18,
 
         )
-        text_drawer(self, "Bob", 400, 400)
+        
+        # text_drawer(self, "The journeys of 1000 hackathons begins with 7 steps", 400, 400)
 
 
     def on_key_press(self, key, modifiers):
@@ -266,6 +256,9 @@ class GameView(arcade.View):
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
 
+        if key == arcade.key.Q:
+            self.shoot_pressed = True
+
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
 
@@ -273,6 +266,9 @@ class GameView(arcade.View):
             self.player_sprite.change_x = 0
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = 0
+
+        if key == arcade.key.Q:
+            self.shoot_pressed = False
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -310,6 +306,75 @@ class GameView(arcade.View):
 
         # Position the camera
         self.center_camera_to_player()
+
+        # reset on fall off map
+        if self.player_sprite.center_y < -100:
+            self.player_sprite.center_x = 64
+            self.player_sprite.center_y = 96
+
+        ### BULLET STUFF
+        if self.can_shoot:
+            if self.shoot_pressed:
+                bullet = arcade.Sprite(
+                    ":resources:images/space_shooter/laserBlue01.png",
+                    SPRITE_SCALING_LASER,
+                )
+
+                if self.player_sprite.facing_direction == RIGHT_FACING:
+                    bullet.change_x = BULLET_SPEED
+                else:
+                    bullet.change_x = -BULLET_SPEED
+
+                bullet.center_x = self.player_sprite.center_x
+                bullet.center_y = self.player_sprite.center_y
+
+                self.scene.add_sprite(LAYER_NAME_BULLETS, bullet)
+
+                self.can_shoot = False
+        else:
+            self.shoot_timer += 1
+            if self.shoot_timer == SHOOT_SPEED:
+                self.can_shoot = True
+                self.shoot_timer = 0
+
+        # Update moving platforms, enemies, and bullets
+        self.scene.update(
+            [LAYER_NAME_BULLETS]
+        )
+        for bullet in self.scene[LAYER_NAME_BULLETS]:
+            hit_list = arcade.check_for_collision_with_lists(
+                bullet,
+                [
+                    # self.scene[LAYER_NAME_MOVING_PLATFORMS],
+                ],
+            )
+
+            if hit_list:
+                bullet.remove_from_sprite_lists()
+
+                # for collision in hit_list:
+                #     if (
+                #         self.scene[LAYER_NAME_ENEMIES]
+                #         in collision.sprite_lists
+                #     ):
+                #         # The collision was with an enemy
+                #         collision.health -= BULLET_DAMAGE
+
+                #         if collision.health <= 0:
+                #             collision.remove_from_sprite_lists()
+                #             self.score += 100
+
+                #         # Hit sound
+                #         arcade.play_sound(self.hit_sound)
+
+                return
+
+            if (bullet.right < 0) or (
+                bullet.left
+                > (self.tile_map.width * self.tile_map.tile_width) * TILE_SCALING
+            ):
+                bullet.remove_from_sprite_lists()
+
 
 class GameOverView(arcade.View):
     def __init__(self):
