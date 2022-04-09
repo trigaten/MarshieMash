@@ -72,8 +72,6 @@ class Player(arcade.Sprite):
 
     """ Player Class """
 
-
-
     def update(self):
 
         """ Move the player """
@@ -141,7 +139,12 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
-
+        map_name = ":resources:tiled_maps/map.json"
+        layer_options = {
+            "Platforms": {
+                "use_spatial_hash": True,
+            },
+        }
         # Set up the Game Camera
         self.camera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -155,9 +158,19 @@ class GameView(arcade.View):
 
         self.score = 0
 
+        # Read in the tiled map
+        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
 
-        # Initialize Scene
-        self.scene = arcade.Scene()
+        # Initialize Scene with our TileMap, this will automatically add all layers
+        # from the map as SpriteLists in the scene in the proper order.
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
+
+                # Set the background color
+        if self.tile_map.background_color:
+            arcade.set_background_color(self.tile_map.background_color)
+
+        # # Initialize Scene
+        # self.scene = arcade.Scene()
 
         # Set up the player, specifically placing it at these coordinates.
         image_source = "marshie_blue.png"
@@ -178,36 +191,19 @@ class GameView(arcade.View):
         #     self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
         # )
 
-        self.load_level(1)
+                # Name of map file to load
 
-    def load_level(self, level):
-        # layer_options = {"Platforms": {"use_spatial_hash": True}}
+        # Layer specific options are defined based on Layer names in a dictionary
+        # Doing this will make the SpriteList for the platforms layer
+        # use spatial hashing for detection.
+        
 
-        # Read in the tiled map
-        self.tile_map = arcade.load_tilemap(
-            f":resources:tiled_maps/level_{level}.json", scaling=TILE_SPRITE_SCALING
-        )
+        
 
-        # --- Walls ---
-
-        # Calculate the right edge of the my_map in pixels
-        self.end_of_map = self.tile_map.width * GRID_PIXEL_SIZE
-
+        # Create the 'physics engine'
         self.physics_engine = arcade.PhysicsEnginePlatformer(
-            self.player_sprite,
-            self.tile_map.sprite_lists["Platforms"],
-            gravity_constant=GRAVITY,
+            self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Platforms"]
         )
-
-        # --- Other stuff
-        # Set the background color
-        if self.tile_map.background_color:
-            arcade.set_background_color(self.tile_map.background_color)
-
-        # Set the view port boundaries
-        # These numbers set where we have 'scrolled' to.
-        self.view_left = 0
-        self.view_bottom = 0
 
     def on_draw(self):
         """Render the screen."""
