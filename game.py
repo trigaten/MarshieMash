@@ -66,8 +66,6 @@ SCREEN_WIDTH = 1024.0
 SCREEN_HEIGHT = 600.0
 
 
-
-
 class Player(arcade.Sprite):
 
     """ Player Class """
@@ -139,7 +137,7 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
-        map_name = ":resources:tiled_maps/map.json"
+        map_name = "/Users/sander/map.tmx"
         layer_options = {
             "Platforms": {
                 "use_spatial_hash": True,
@@ -159,7 +157,7 @@ class GameView(arcade.View):
         self.score = 0
 
         # Read in the tiled map
-        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
+        self.tile_map = arcade.load_tilemap("/Users/sander/map.tmx", TILE_SCALING, layer_options)
 
         # Initialize Scene with our TileMap, this will automatically add all layers
         # from the map as SpriteLists in the scene in the proper order.
