@@ -179,7 +179,7 @@ class GameView(arcade.View):
             self.scene.add_sprite("Coins", coin)
 
 
-        fire = arcade.Sprite('assets/bitcamplogo.png', 0.15)
+        fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
         fire.center_x = 1800
         fire.center_y = 100
         self.scene.add_sprite('Fire', fire)
@@ -267,6 +267,9 @@ class GameView(arcade.View):
 
         if key == arcade.key.Q:
             self.shoot_pressed = True
+        
+        if key == arcade.key.M:
+            
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
@@ -317,12 +320,20 @@ class GameView(arcade.View):
         )
 
         if len(fireHit) > 0:
-            print('LEVEL END')
-            time.sleep(1)
-            gameview = GameView1(self.player_type)
-            gameview.setup()
-            self.window.show_view(gameview)
-            print('here')
+            # print('LEVEL END')
+            fire = arcade.Sprite("assets/bitcamplogo_lit.png", 0.15)
+            fire.center_x = fireHit[0].center_x
+            fire.center_y = fireHit[0].center_y
+
+            fire.remove_from_sprite_lists()
+            self.scene.add_sprite('Fire', fire)
+            fireHit.pop()
+            
+            # time.sleep(1)
+            # gameview = GameView1(self.player_type)
+            # gameview.setup()
+            # self.window.show_view(gameview)
+            # print('here')
         # Position the camera
         self.center_camera_to_player()
 
