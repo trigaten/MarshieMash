@@ -32,7 +32,7 @@ class MenuView(arcade.View):
     def on_draw(self):
         self.clear()
 
-        self.background = arcade.load_texture("map.PNG", x=25, y=0, width=2500, height=1264)
+        self.background = arcade.load_texture("assets/map.PNG", x=25, y=0, width=2500, height=1264)
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
@@ -44,10 +44,23 @@ class MenuView(arcade.View):
         spot_coordinates = [(90, 280), (205, 135), (325, 440),
                             (410, 220), (590, 450), (615, 350),
                             (530, 200)]
+        self.dead_fire  = arcade.load_texture("assets/bitcamp_unlit.png", x=0, y=0, width=476, height=475)
+        self.icon = arcade.load_texture("assets/bitcampfire.gif", x=0, y=0, width=300, height=300)
+        self.fire = arcade.load_animated_gif("assets/bitcampfire.gif")
+
         for x in range(len(spot_coordinates)):
-            if x != self.level:
-                arcade.draw_circle_outline(spot_coordinates[x][0],
-                spot_coordinates[x][1], 10, arcade.color.WHITE, 9,-1)
+
+            if x > self.level:
+                arcade.draw_lrwh_rectangle_textured(spot_coordinates[x][0]-25,
+                                            spot_coordinates[x][1]-25,
+                                            50, 50,
+                                            self.dead_fire)
+            else:
+                arcade.draw_lrwh_rectangle_textured(spot_coordinates[x][0]-30,
+                                                    spot_coordinates[x][1]-30,
+                                                    60, 60,
+                                                    self.icon)
+                self.fire.draw()
 
 
         """arcade.draw_circle_outline(205, 135, 10, arcade.color.WHITE, 9,-1)
@@ -57,11 +70,10 @@ class MenuView(arcade.View):
         arcade.draw_circle_outline(615, 350, 10, arcade.color.WHITE, 9,-1)
         arcade.draw_circle_outline(530, 200, 10, arcade.color.WHITE, 9,-1)"""
 
-        self.icon = arcade.load_texture("bitcamp.png", x=0, y=0, width=476, height=475)
-        arcade.draw_lrwh_rectangle_textured(spot_coordinates[self.level][0]-25,
-                                            spot_coordinates[self.level][1]-25,
-                                            50, 50,
-                                            self.icon)
+        #self.icon = arcade.load_texture("assets/bitcampfire.gif", x=0, y=0, width=300, height=300)
+
+
+
         arcade.draw_text("", WIDTH / 2, HEIGHT / 2 - 75,
                          arcade.color.GRAY, font_size=20, anchor_x="center",
                          font_name= "Comic Sans MS",)
