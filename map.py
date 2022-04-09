@@ -60,7 +60,6 @@ class MenuView(arcade.View):
                                                     spot_coordinates[x][1]-30,
                                                     60, 60,
                                                     self.icon)
-                self.fire.draw()
 
 
         """arcade.draw_circle_outline(205, 135, 10, arcade.color.WHITE, 9,-1)
