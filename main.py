@@ -20,8 +20,6 @@ WIDTH = 800
 HEIGHT = 600
 SPRITE_SCALING = 0.5
 
-SCREEN_WIDTH = 1024.0
-SCREEN_HEIGHT = 600.0
 class MenuView(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.color.WHITE)
