@@ -52,7 +52,8 @@ LAYER_NAME_BULLETS = "Bullets"
 class Entity(arcade.Sprite):
     def __init__(self, image, scale):
         super().__init__()
-        self.texture = self.load_texture_pair(image)[0]
+        self.right_texture, self.left_texture = self.load_texture_pair(image)
+        self.texture = self.right_texture
         # Default to facing right
         self.facing_direction = RIGHT_FACING
 
@@ -109,3 +110,5 @@ class Player(Entity):
         elif self.top > SCREEN_HEIGHT - 1:
 
             self.top = SCREEN_HEIGHT - 1
+
+            

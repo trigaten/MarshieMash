@@ -254,9 +254,12 @@ class GameView(arcade.View):
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
             self.player_sprite.facing_direction = LEFT_FACING
+            self.player_sprite.texture = self.player_sprite.left_texture
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
             self.player_sprite.facing_direction = RIGHT_FACING
+            self.player_sprite.texture = self.player_sprite.right_texture
+
 
         if key == arcade.key.Q:
             self.shoot_pressed = True
