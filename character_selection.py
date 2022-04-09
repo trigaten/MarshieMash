@@ -18,6 +18,8 @@ If Python and Arcade are installed, this example can be run from the command lin
 python -m arcade.examples.view_instructions_and_game_over.py
 """
 import arcade
+
+from game import GameView
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -113,18 +115,18 @@ class Player(arcade.Sprite):
             self.top = SCREEN_HEIGHT - 1
 
 
-class GameView(arcade.View):
-    def __init__(self, playerType):
+class CharacterSelection(arcade.View):
+    def __init__(self):
         super().__init__()
 
         # Our Scene Object
         self.scene = None
 
         # Separate variable that holds the player sprite
-        self.player_sprite = None
-        
-        self.player_type = playerType
-        print('in init, playerType: ' + str(self.player_type))
+        self.blue = None
+        self.red = None
+        self.green = None
+        self.char_list = None
         # Our physics engine
         self.physics_engine = None
 
@@ -147,16 +149,17 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
-        map_name = ":resources:tiled_maps/map.json"
-        layer_options = {
-            "Platforms": {
-                "use_spatial_hash": True,
-            },
-        }
+        # map_name = ":resources:tiled_maps/map.json"
+        # layer_options = {
+        #     "Platforms": {
+        #         "use_spatial_hash": True,
+        #     },
+        # }
         # Set up the Game Camera
         self.camera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-        self.background = arcade.load_texture("big_tree.png")
+        # self.background = arcade.load_texture("big_tree.png")
+        self.background = arcade.load_texture("character_selection_background.png")
 
         # Set up the GUI Camera
 
@@ -167,35 +170,60 @@ class GameView(arcade.View):
         self.score = 0
 
         # Read in the tiled map
-        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
+        # self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
 
         # Initialize Scene with our TileMap, this will automatically add all layers
         # from the map as SpriteLists in the scene in the proper order.
-        self.scene = arcade.Scene.from_tilemap(self.tile_map)
+        # self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
                 # Set the background color
-        if self.tile_map.background_color:
-            arcade.set_background_color(self.tile_map.background_color)
+        # if self.tile_map.background_color:
+            # arcade.set_background_color(self.tile_map.background_color)
 
         # # Initialize Scene
-        # self.scene = arcade.Scene()
+        self.scene = arcade.Scene()
 
         # Set up the player, specifically placing it at these coordinates.
-        player_types = {'Blue': 'marshie_blue.png', 'Red': 'marshie_red.png', 'Green': 'marshie_green.png'}
-        self.player_sprite = arcade.Sprite(player_types[self.player_type], 0.02)
-        self.player_sprite.center_x = 64
-        self.player_sprite.center_y = 96
-        self.scene.add_sprite("Player", self.player_sprite)
+        # self.player_sprite = arcade.Sprite(image_source, 0.02)
+
+        image_source = ["marshie_blue.png", "marshie_red.png", "marshie_green.png"]
+        self.blue = arcade.Sprite(image_source[0], 0.05)
+
+        self.red = arcade.Sprite(image_source[1], 0.05)
+
+        self.green = arcade.Sprite(image_source[2], 0.05)
+        self.char_list = arcade.SpriteList()
+        self.char_list.append(self.blue)
+        self.char_list.append(self.red)
+        self.char_list.append(self.green)
+        self.blue.center_x = 200
+        # self.blue.position = 500, 500
+      
+        self.blue.center_y = 250
+        
+        self.red.center_x = 400
+        self.red.center_y = 250
+        
+        self.green.center_x = 600
+        self.green.center_y = 250
+
+        self.scene.add_sprite("Blue", self.blue)
+        self.scene.add_sprite("Red", self.red)
+        self.scene.add_sprite("Green", self.green)
+
+        # self.player_sprite.center_x = 64
+        # self.player_sprite.center_y = 96
+        # self.scene.add_sprite("Player", self.player_sprite)
 
 
 
 
         # Use a loop to place some coins for our character to pick up
-        for x in range(128, 1250, 256):
-            coin = arcade.Sprite(":resources:images/items/coinGold.png", COIN_SCALING)
-            coin.center_x = x
-            coin.center_y = 96
-            self.scene.add_sprite("Coins", coin)
+        # for x in range(128, 1250, 256):
+        #     coin = arcade.Sprite(":resources:images/items/coinGold.png", COIN_SCALING)
+        #     coin.center_x = x
+        #     coin.center_y = 96
+        #     self.scene.add_sprite("Coins", coin)
 
         # Create the 'physics engine'
         # self.physics_engine = arcade.PhysicsEnginePlatformer(
@@ -212,9 +240,9 @@ class GameView(arcade.View):
 
 
         # Create the 'physics engine'
-        self.physics_engine = arcade.PhysicsEnginePlatformer(
-            self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Platforms"]
-        )
+        # self.physics_engine = arcade.PhysicsEnginePlatformer(
+            # self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Platforms"]
+        # )
 
     def on_draw(self):
         """Render the screen."""
@@ -228,8 +256,10 @@ class GameView(arcade.View):
         #                                     SCREEN_WIDTH, SCREEN_HEIGHT,
         #                                     self.background)
         # Draw our Scene
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                            SCREEN_WIDTH, SCREEN_HEIGHT,
+                                            self.background)
         self.scene.draw()
-
 
         # Activate the GUI camera before drawing GUI elements
 
@@ -241,105 +271,37 @@ class GameView(arcade.View):
 
         score_text = f"Score: {self.score}"
 
-        arcade.draw_text(
+        # arcade.draw_text(
 
-            score_text,
+        #     score_text,
 
-            10,
+        #     10,
 
-            10,
+        #     10,
 
-            arcade.csscolor.WHITE,
+        #     arcade.csscolor.WHITE,
 
-            18,
+        #     18,
 
-        )
-        text_drawer(self, "Bob", 400, 400)
-
-
-    def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed."""
-
-        if key == arcade.key.UP or key == arcade.key.W:
-            if self.physics_engine.can_jump():
-                self.player_sprite.change_y = PLAYER_JUMP_SPEED
-        elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
-
-    def on_key_release(self, key, modifiers):
-        """Called when the user releases a key."""
-
-        if key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = 0
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = 0
-
-    def center_camera_to_player(self):
-        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
-        screen_center_y = self.player_sprite.center_y - (
-            self.camera.viewport_height / 2
-        )
-        if screen_center_x < 0:
-            screen_center_x = 0
-        if screen_center_y < 0:
-            screen_center_y = 0
-        player_centered = screen_center_x, screen_center_y
-
-        self.camera.move_to(player_centered)
-
-    def on_update(self, delta_time):
-        """Movement and game logic"""
-
-        # Move the player with the physics engine
-        self.physics_engine.update()
-
-        # See if we hit any coins
-        coin_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.scene["Coins"]
-        )
-
-        # Loop through each coin we hit (if any) and remove it
-        for coin in coin_hit_list:
-            # Remove the coin
-            coin.remove_from_sprite_lists()
-            # Play a sound
-            # Add one to the score
-
-            self.score += 1
+        # )
+        ####TEXT DRAWER HEREEE
+        # text_drawer(self, "Click your character", 400, 400)
 
 
-        # Position the camera
-        self.center_camera_to_player()
-
-class GameOverView(arcade.View):
-    def __init__(self):
-        super().__init__()
-        self.time_taken = 0
-
-    def on_show(self):
-        arcade.set_background_color(arcade.color.BLACK)
-
-    def on_draw(self):
-        self.clear()
-        """
-        Draw "Game over" across the screen.
-        """
-        arcade.draw_text("Game Over", 240, 400, arcade.color.WHITE, 54)
-        arcade.draw_text("Click to restart", 310, 300, arcade.color.WHITE, 24)
-
-        time_taken_formatted = f"{round(self.time_taken, 2)} seconds"
-        arcade.draw_text(f"Time taken: {time_taken_formatted}",
-                         WIDTH / 2,
-                         200,
-                         arcade.color.GRAY,
-                         font_size=15,
-                         anchor_x="center")
-
-        output_total = f"Total Score: {self.window.total_score}"
-        arcade.draw_text(output_total, 10, 10, arcade.color.WHITE, 14)
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = GameView()
-        self.window.show_view(game_view)
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        characters = arcade.get_sprites_at_point((x,y), self.char_list)
+        if (len(characters)) > 0:
+            print(characters[0])
+            # characters[0].nam
+            color = ''
+            if characters[0] == self.blue:
+                color = 'Blue'
+            if characters[0] == self.red:
+                color = 'Red'
+            if characters[0] == self.green:
+                color = 'Green'
+            print('here')
+            print('color: ' + str(color))
+            gameview = GameView(color)
+            gameview.setup()
+            self.window.show_view(gameview)
