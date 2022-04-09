@@ -184,6 +184,26 @@ class GameView(arcade.View):
         fire.center_y = 100
         self.scene.add_sprite('Fire', fire)
 
+
+        # print('HERE')
+        map = arcade.Sprite("assets/MAP.PNG", 0.4)
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera.viewport_height / 2
+        )
+        if screen_center_x < 0:
+            screen_center_x = 0
+        if screen_center_y < 0:
+            screen_center_y = 0
+        player_centered = screen_center_x, screen_center_y
+
+        map.center_x = screen_center_x
+        map.center_y = screen_center_y
+
+        # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
+        map.alpha = 0
+        self.scene.add_sprite('Map', map)
+
         # Create the 'physics engine'
         # self.physics_engine = arcade.PhysicsEnginePlatformer(
         #     self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
@@ -274,7 +294,9 @@ class GameView(arcade.View):
             self.shoot_pressed = True
         
         if key == arcade.key.M:
-            
+           self.scene.get_sprite_list('Map')[0].alpha = 215
+
+
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
@@ -287,6 +309,11 @@ class GameView(arcade.View):
         if key == arcade.key.Q:
             self.shoot_pressed = False
 
+        if key == arcade.key.M:
+           self.scene.get_sprite_list('Map')[0].alpha = 0
+
+
+
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
         screen_center_y = self.player_sprite.center_y - (
@@ -297,8 +324,10 @@ class GameView(arcade.View):
         if screen_center_y < 0:
             screen_center_y = 0
         player_centered = screen_center_x, screen_center_y
-
+        print('(' + str(screen_center_x) + ', ' + str(screen_center_y) + ')')
         self.camera.move_to(player_centered)
+        self.scene.get_sprite_list('Map')[0].center_x = screen_center_x + 400
+        self.scene.get_sprite_list('Map')[0].center_y = screen_center_y + 300
 
     def on_update(self, delta_time):
         """Movement and game logic"""
@@ -310,7 +339,7 @@ class GameView(arcade.View):
         coin_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Coins"]
         )
-
+        
         # Loop through each coin we hit (if any) and remove it
         for coin in coin_hit_list:
             # Remove the coin
@@ -319,6 +348,8 @@ class GameView(arcade.View):
             # Add one to the score
 
             self.score += 1
+
+
 
         fireHit = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Fire"]
@@ -341,6 +372,8 @@ class GameView(arcade.View):
             # print('here')
         # Position the camera
         self.center_camera_to_player()
+
+
 
         # reset on fall off map
         if self.player_sprite.center_y < -100:
