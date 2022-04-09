@@ -159,7 +159,7 @@ class CharacterSelection(arcade.View):
         self.camera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
         # self.background = arcade.load_texture("big_tree.png")
-        self.background = arcade.load_texture("character_selection_background.png")
+        self.background = arcade.load_texture("assets/character_selection_background.png")
 
         # Set up the GUI Camera
 
@@ -186,7 +186,7 @@ class CharacterSelection(arcade.View):
         # Set up the player, specifically placing it at these coordinates.
         # self.player_sprite = arcade.Sprite(image_source, 0.02)
 
-        image_source = ["marshie_blue.png", "marshie_red.png", "marshie_green.png"]
+        image_source = ["assets/marshie_blue.png", "assets/marshie_red.png", "assets/marshie_green.png"]
         self.blue = arcade.Sprite(image_source[0], 0.05)
 
         self.red = arcade.Sprite(image_source[1], 0.05)

@@ -156,7 +156,7 @@ class GameView(arcade.View):
         # Set up the Game Camera
         self.camera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-        self.background = arcade.load_texture("big_tree.png")
+        self.background = arcade.load_texture("assets/big_tree.png")
 
         # Set up the GUI Camera
 
@@ -181,7 +181,7 @@ class GameView(arcade.View):
         # self.scene = arcade.Scene()
 
         # Set up the player, specifically placing it at these coordinates.
-        player_types = {'Blue': 'marshie_blue.png', 'Red': 'marshie_red.png', 'Green': 'marshie_green.png'}
+        player_types = {'Blue': 'assets/marshie_blue.png', 'Red': 'assets/marshie_red.png', 'Green': 'assets/marshie_green.png'}
         self.player_sprite = arcade.Sprite(player_types[self.player_type], 0.02)
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 96
