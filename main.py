@@ -1,4 +1,5 @@
 import arcade
+
 SPRITE_SCALING = 0.5
 
 SCREEN_WIDTH = 800
@@ -11,6 +12,9 @@ file_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(file_path)
 
 from game import GameView
+
+
+
 WIDTH = 800
 HEIGHT = 600
 SPRITE_SCALING = 0.5
@@ -23,16 +27,20 @@ class MenuView(arcade.View):
 
     def on_draw(self):
         self.clear()
-        
+
         self.background = arcade.load_texture("big_tree.png", x=800.0, y=800.0, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
-                                            self.background) 
+                                            self.background)
         arcade.draw_text("How to have a good hackathon", WIDTH / 2, HEIGHT / 2,
-                         arcade.color.BLACK, font_size=30, anchor_x="center")
+                         arcade.color.BLACK, font_size=30, anchor_x="center",
+                         font_name=
+                             "Comic Sans MS",
+                         )
         arcade.draw_text("Step 1: just participate (click)", WIDTH / 2, HEIGHT / 2 - 75,
-                         arcade.color.GRAY, font_size=20, anchor_x="center")
-               
+                         arcade.color.GRAY, font_size=20, anchor_x="center",
+                         font_name= "Comic Sans MS",)
+
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         instructions_view = GameView()
         instructions_view.setup()

@@ -65,6 +65,12 @@ SPRITE_SCALING = 0.5
 SCREEN_WIDTH = 1024.0
 SCREEN_HEIGHT = 600.0
 
+def text_drawer(self, text, x_coord, y_coord, font_size = 30, font_name = "Comic Sans MS",
+                color = arcade.color.WHITE):
+    self.text_sprite = arcade.create_text_sprite(text, x_coord, y_coord,
+    color, font_size = font_size, font_name = font_name)
+    return self.scene.add_sprite("message", self.text_sprite)
+
 
 class Player(arcade.Sprite):
 
@@ -177,6 +183,9 @@ class GameView(arcade.View):
         self.player_sprite.center_y = 96
         self.scene.add_sprite("Player", self.player_sprite)
 
+
+
+
         # Use a loop to place some coins for our character to pick up
         for x in range(128, 1250, 256):
             coin = arcade.Sprite(":resources:images/items/coinGold.png", COIN_SCALING)
@@ -194,9 +203,9 @@ class GameView(arcade.View):
         # Layer specific options are defined based on Layer names in a dictionary
         # Doing this will make the SpriteList for the platforms layer
         # use spatial hashing for detection.
-        
 
-        
+
+
 
         # Create the 'physics engine'
         self.physics_engine = arcade.PhysicsEnginePlatformer(
@@ -241,6 +250,7 @@ class GameView(arcade.View):
             18,
 
         )
+        text_drawer(self, "Bob", 400, 400)
 
 
     def on_key_press(self, key, modifiers):
@@ -329,5 +339,3 @@ class GameOverView(arcade.View):
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         game_view = GameView()
         self.window.show_view(game_view)
-
-
