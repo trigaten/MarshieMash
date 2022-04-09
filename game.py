@@ -137,11 +137,7 @@ class GameView(arcade.View):
         self.score = 0
 
 
-        # Load sounds
-        self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
-        self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
-
-        arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
+        # arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
@@ -154,8 +150,6 @@ class GameView(arcade.View):
         # Set up the GUI Camera
 
         self.gui_camera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
-
-
 
         # Keep track of the score
 
@@ -171,26 +165,6 @@ class GameView(arcade.View):
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 96
         self.scene.add_sprite("Player", self.player_sprite)
-
-        # # Create the ground
-        # # This shows using a loop to place multiple sprites horizontally
-        # for x in range(0, 1250, 64):
-        #     wall = arcade.Sprite(":resources:images/tiles/grassMid.png", TILE_SCALING)
-        #     wall.center_x = x
-        #     wall.center_y = 32
-        #     self.scene.add_sprite("Walls", wall)
-
-        # Put some crates on the ground
-        # This shows using a coordinate list to place sprites
-        coordinate_list = [[512, 96], [256, 96], [768, 96]]
-
-        # for coordinate in coordinate_list:
-        #     # Add a crate on the ground
-        #     wall = arcade.Sprite(
-        #         ":resources:images/tiles/boxCrate_double.png", TILE_SCALING
-        #     )
-        #     wall.position = coordinate
-        #     self.scene.add_sprite("Walls", wall)
 
         # Use a loop to place some coins for our character to pick up
         for x in range(128, 1250, 256):
@@ -281,7 +255,6 @@ class GameView(arcade.View):
         if key == arcade.key.UP or key == arcade.key.W:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
-                arcade.play_sound(self.jump_sound)
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         elif key == arcade.key.RIGHT or key == arcade.key.D:
@@ -324,7 +297,6 @@ class GameView(arcade.View):
             # Remove the coin
             coin.remove_from_sprite_lists()
             # Play a sound
-            arcade.play_sound(self.collect_coin_sound)
             # Add one to the score
 
             self.score += 1
