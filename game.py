@@ -127,7 +127,7 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
-        map_name = ":resources:tiled_maps/map.json"
+        map_name = "/Users/sander/map.tmx"
         #"/Users/sander/map.tmx"
         layer_options = {
             "Platforms": {
@@ -253,8 +253,10 @@ class GameView(arcade.View):
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.player_sprite.facing_direction = LEFT_FACING
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            self.player_sprite.facing_direction = RIGHT_FACING
 
         if key == arcade.key.Q:
             self.shoot_pressed = True
@@ -315,9 +317,22 @@ class GameView(arcade.View):
         ### BULLET STUFF
         if self.can_shoot:
             if self.shoot_pressed:
+                # SANDER BULLET CODE
+                bullet_image = None
+               
+                if self.player_sprite.player_color == "blue":
+                    bullet_scaling = SPRITE_SCALING_LASER/10
+                    bullet_image = "assets/owl.png"
+                elif self.player_sprite.player_color == "green":
+                    bullet_scaling = SPRITE_SCALING_LASER/11
+                    bullet_image = "assets/banjo.png"
+                else:
+                    bullet_scaling = SPRITE_SCALING_LASER/3
+                    bullet_image = "assets/sword.png"
+
                 bullet = arcade.Sprite(
-                    ":resources:images/space_shooter/laserBlue01.png",
-                    SPRITE_SCALING_LASER,
+                    bullet_image,
+                    bullet_scaling,
                 )
 
                 if self.player_sprite.facing_direction == RIGHT_FACING:
