@@ -3,17 +3,14 @@ This program shows how to:
   * Have one or more instruction screens
   * Show a 'Game over' text and halt the game
   * Allow the user to restart the game
-
 Make a separate class for each view (screen) in your game.
 The class will inherit from arcade.View. The structure will
 look like an arcade.Window as each view will need to have its own draw,
 update and window event methods. To switch a view, simply create a view
 with `view = MyView()` and then use the view.show() method.
-
 This example shows how you can set data from one View on another View to pass data
 around (see: time_taken), or you can store data on the Window object to share data between
 all Views (see: total_score).
-
 If Python and Arcade are installed, this example can be run from the command line with:
 python -m arcade.examples.view_instructions_and_game_over.py
 """
@@ -21,14 +18,12 @@ import arcade
 
 from game import GameView
 # Constants
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 650
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Platformer"
 TILE_SPRITE_SCALING = 0.5
 PLAYER_SCALING = 0.6
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Tiled Map with Levels Example"
 SPRITE_PIXEL_SIZE = 128
 GRID_PIXEL_SIZE = SPRITE_PIXEL_SIZE * TILE_SPRITE_SCALING
@@ -60,12 +55,10 @@ file_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(file_path)
 
 
-WIDTH = 800
-HEIGHT = 600
 SPRITE_SCALING = 0.5
 
-SCREEN_WIDTH = 1024.0
-SCREEN_HEIGHT = 600.0
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
 def text_drawer(self, text, x_coord, y_coord, font_size = 30, font_name = "Comic Sans MS",
                 color = arcade.color.WHITE):
@@ -196,16 +189,15 @@ class CharacterSelection(arcade.View):
         self.char_list.append(self.blue)
         self.char_list.append(self.red)
         self.char_list.append(self.green)
-        self.blue.center_x = 200
-        # self.blue.position = 500, 500
-      
-        self.blue.center_y = 250
+
+        self.blue.center_x = 140
+        self.blue.center_y = 265
         
-        self.red.center_x = 400
-        self.red.center_y = 250
+        self.red.center_x = 410
+        self.red.center_y = 265
         
-        self.green.center_x = 600
-        self.green.center_y = 250
+        self.green.center_x = 660
+        self.green.center_y = 260
 
         self.scene.add_sprite("Blue", self.blue)
         self.scene.add_sprite("Red", self.red)
