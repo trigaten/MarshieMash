@@ -17,6 +17,7 @@ all Views (see: total_score).
 If Python and Arcade are installed, this example can be run from the command line with:
 python -m arcade.examples.view_instructions_and_game_over.py
 """
+from re import L
 import arcade
 from entity import Player
 
@@ -87,6 +88,8 @@ SPRITE_SCALING = 0.5
 SCREEN_WIDTH = 1024.0
 SCREEN_HEIGHT = 600.0
 
+TOTALDISTANCE =  2600
+
 def text_drawer(self, text, x_coord, y_coord, font_size = 30, font_name = "Comic Sans MS",
                 color = arcade.color.WHITE):
     self.text_sprite = arcade.create_text_sprite(text, x_coord, y_coord,
@@ -125,7 +128,10 @@ class GameView(arcade.View):
 
         self.score = 0
 
-
+        self.campfireTracker = 0
+        self.firstTimeVisiting = [True] * 7
+        self.inGameCoords = []
+        self.mapCoords = []
         # arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
@@ -178,11 +184,34 @@ class GameView(arcade.View):
             coin.center_y = 96
             self.scene.add_sprite("Coins", coin)
 
+        inGameCoords = []
 
-        fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
-        fire.center_x = 1800
-        fire.center_y = 100
-        self.scene.add_sprite('Fire', fire)
+        for i in range(200, TOTALDISTANCE-200, (TOTALDISTANCE-200) // 7):
+            fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
+            fire.center_x = i
+            fire.center_y = 100
+            inGameCoords.append((i, 100))
+            self.scene.add_sprite('Fire', fire)
+        # inGameCoords.reverse()
+        self.inGameCoords = inGameCoords
+
+        mapCoords = [(130, 280), (205, 175), (350, 440),
+                            (410, 250), (615, 350), (590, 430),
+                            (530, 230)]
+        self.mapCoords = mapCoords
+        for i in range(7):
+            fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.08)
+            fire.center_x = mapCoords[i][0]
+            fire.center_y = mapCoords[i][1]
+            fire.alpha = 255     
+            fire.visible = False
+            self.scene.add_sprite('MapFire', fire) 
+
+
+
+        # fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
+        # fire.center_x = 1800
+        # fire.center_y = 100
 
 
         # print('HERE')
@@ -294,7 +323,10 @@ class GameView(arcade.View):
             self.shoot_pressed = True
         
         if key == arcade.key.M:
-           self.scene.get_sprite_list('Map')[0].alpha = 215
+            self.scene.get_sprite_list('Map')[0].alpha = 215
+            for i in range(len(self.scene.get_sprite_list('MapFire'))):
+                self.scene.get_sprite_list('MapFire')[i].visible = True
+
 
 
 
@@ -310,8 +342,9 @@ class GameView(arcade.View):
             self.shoot_pressed = False
 
         if key == arcade.key.M:
-           self.scene.get_sprite_list('Map')[0].alpha = 0
-
+            self.scene.get_sprite_list('Map')[0].alpha = 0
+            for i in range(len(self.scene.get_sprite_list('MapFire'))):
+                self.scene.get_sprite_list('MapFire')[i].visible =False
 
 
     def center_camera_to_player(self):
@@ -324,10 +357,19 @@ class GameView(arcade.View):
         if screen_center_y < 0:
             screen_center_y = 0
         player_centered = screen_center_x, screen_center_y
-        print('(' + str(screen_center_x) + ', ' + str(screen_center_y) + ')')
+        # print('(' + str(screen_center_x) + ', ' + str(screen_center_y) + ')')
         self.camera.move_to(player_centered)
         self.scene.get_sprite_list('Map')[0].center_x = screen_center_x + 400
         self.scene.get_sprite_list('Map')[0].center_y = screen_center_y + 300
+
+
+        coords = [(130, 280), (205, 175), (350, 440),
+                                    (410, 250),  (590, 430),(615, 350),
+                                    (530, 230)]
+        for i in range(7):
+            self.scene.get_sprite_list('MapFire')[i].center_x = screen_center_x + coords[i][0]
+            self.scene.get_sprite_list('MapFire')[i].center_y = screen_center_y + coords[i][1]
+
 
     def on_update(self, delta_time):
         """Movement and game logic"""
@@ -364,6 +406,21 @@ class GameView(arcade.View):
             fire.remove_from_sprite_lists()
             self.scene.add_sprite('Fire', fire)
             fireHit.pop()
+            idx = self.inGameCoords.index((fire.center_x, fire.center_y))
+            if (self.firstTimeVisiting[idx] == True):
+                fire = arcade.Sprite("assets/bitcamplogo_lit.png", 0.08)
+                fire.center_x = self.scene['MapFire'][idx].center_x
+                fire.center_y = self.scene['MapFire'][idx].center_y
+                fire.visible = self.scene['MapFire'][idx].visible
+                self.scene['MapFire'][idx] = fire
+                # fire.remove_from_sprite_lists()
+                # self.scene.add_sprite('MapFire', fire)
+                self.firstTimeVisiting[idx] = False
+                # self.campfireTracker += 1
+
+            # fireHit.pop()
+
+            # self.scene["Fire"][0]
             
             # time.sleep(1)
             # gameview = GameView1(self.player_type)
