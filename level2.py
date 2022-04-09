@@ -19,9 +19,6 @@ python -m arcade.examples.view_instructions_and_game_over.py
 """
 import arcade
 from entity import Player
-
-from level2 import GameView1
-import time
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -96,7 +93,7 @@ def text_drawer(self, text, x_coord, y_coord, font_size = 30, font_name = "Comic
 
 
 
-class GameView(arcade.View):
+class GameView1(arcade.View):
     def __init__(self, playerType):
         super().__init__()
 
@@ -178,12 +175,10 @@ class GameView(arcade.View):
             coin.center_y = 96
             self.scene.add_sprite("Coins", coin)
 
-
         fire = arcade.Sprite('assets/bitcamplogo.png', 0.15)
-        fire.center_x = 1800
+        fire.center_x = 500
         fire.center_y = 100
         self.scene.add_sprite('Fire', fire)
-
         # Create the 'physics engine'
         # self.physics_engine = arcade.PhysicsEnginePlatformer(
         #     self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
@@ -312,17 +307,7 @@ class GameView(arcade.View):
 
             self.score += 1
 
-        fireHit = arcade.check_for_collision_with_list(
-            self.player_sprite, self.scene["Fire"]
-        )
 
-        if len(fireHit) > 0:
-            print('LEVEL END')
-            time.sleep(1)
-            gameview = GameView1(self.player_type)
-            gameview.setup()
-            self.window.show_view(gameview)
-            print('here')
         # Position the camera
         self.center_camera_to_player()
 
@@ -393,11 +378,6 @@ class GameView(arcade.View):
                 > (self.tile_map.width * self.tile_map.tile_width) * TILE_SCALING
             ):
                 bullet.remove_from_sprite_lists()
-    # def on_mouse_press(self, _x, _y, _button, _modifiers):
-    #         gameview = GameView1(self.player_type)
-    #         gameview.setup()
-    #         self.window.show_view(gameview)
-    #         print('here')
 
 
 class GameOverView(arcade.View):
