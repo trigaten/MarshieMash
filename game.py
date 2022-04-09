@@ -145,7 +145,7 @@ class GameView(arcade.View):
         self.score = 0
 
         # Read in the tiled map
-        self.tile_map = arcade.load_tilemap("map/map.tmx", TILE_SCALING, layer_options)
+        self.tile_map = arcade.load_tilemap("/Users/sander/map.tmx", TILE_SCALING, layer_options)
 
         # Initialize Scene with our TileMap, this will automatically add all layers
         # from the map as SpriteLists in the scene in the proper order.

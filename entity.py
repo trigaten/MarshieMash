@@ -70,7 +70,7 @@ class Entity(arcade.Sprite):
 
 class Player(Entity):
     def __init__(self, color, scale):
-        super().__init__("marshie_blue.png", scale)
+        super().__init__("assets/marshie_blue.png", scale)
 
 
     def update(self):
