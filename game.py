@@ -94,7 +94,7 @@ def text_drawer(self, text, x_coord, y_coord, font_size = 30, font_name = "Comic
 
 
 class GameView(arcade.View):
-    def __init__(self):
+    def __init__(self, playerType):
         super().__init__()
 
         # Our Scene Object
@@ -102,7 +102,9 @@ class GameView(arcade.View):
 
         # Separate variable that holds the player sprite
         self.player_sprite = None
-
+        
+        self.player_type = playerType
+        print('in init, playerType: ' + str(self.player_type))
         # Our physics engine
         self.physics_engine = None
 
@@ -125,7 +127,8 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
-        map_name = "/Users/sander/map.tmx"
+        map_name = ":resources:tiled_maps/map.json"
+        #"/Users/sander/map.tmx"
         layer_options = {
             "Platforms": {
                 "use_spatial_hash": True,
@@ -145,7 +148,7 @@ class GameView(arcade.View):
         self.score = 0
 
         # Read in the tiled map
-        self.tile_map = arcade.load_tilemap("/Users/sander/map.tmx", TILE_SCALING, layer_options)
+        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
 
         # Initialize Scene with our TileMap, this will automatically add all layers
         # from the map as SpriteLists in the scene in the proper order.
@@ -159,8 +162,8 @@ class GameView(arcade.View):
         # self.scene = arcade.Scene()
 
         # Set up the player, specifically placing it at these coordinates.
-        image_source = "assets/marshie_blue.png"
-        self.player_sprite = Player(image_source, 0.02)#arcade.Sprite(image_source, 0.02)
+        player_types = {'Blue': 'assets/marshie_blue.png', 'Red': 'assets/marshie_red.png', 'Green': 'assets/marshie_green.png'}
+        self.player_sprite = Player(player_types[self.player_type], 0.02)
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 96
         self.scene.add_sprite("Player", self.player_sprite)
