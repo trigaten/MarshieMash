@@ -65,26 +65,7 @@ SPRITE_SCALING = 0.5
 SCREEN_WIDTH = 1024.0
 SCREEN_HEIGHT = 600.0
 
-class MenuView(arcade.View):
-    def on_show(self):
-        arcade.set_background_color(arcade.color.WHITE)
 
-    def on_draw(self):
-        self.clear()
-        
-        self.background = arcade.load_texture("big_tree.png", x=800.0, y=800.0, width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
-        arcade.draw_lrwh_rectangle_textured(0, 0,
-                                            SCREEN_WIDTH, SCREEN_HEIGHT,
-                                            self.background) 
-        arcade.draw_text("How to have a good hackathon", WIDTH / 2, HEIGHT / 2,
-                         arcade.color.BLACK, font_size=30, anchor_x="center")
-        arcade.draw_text("Step 1: just participate (click)", WIDTH / 2, HEIGHT / 2 - 75,
-                         arcade.color.GRAY, font_size=20, anchor_x="center")
-               
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        instructions_view = GameView()
-        instructions_view.setup()
-        self.window.show_view(instructions_view)
 
 
 class Player(arcade.Sprite):
@@ -203,13 +184,13 @@ class GameView(arcade.View):
         # This shows using a coordinate list to place sprites
         coordinate_list = [[512, 96], [256, 96], [768, 96]]
 
-        for coordinate in coordinate_list:
-            # Add a crate on the ground
-            wall = arcade.Sprite(
-                ":resources:images/tiles/boxCrate_double.png", TILE_SCALING
-            )
-            wall.position = coordinate
-            self.scene.add_sprite("Walls", wall)
+        # for coordinate in coordinate_list:
+        #     # Add a crate on the ground
+        #     wall = arcade.Sprite(
+        #         ":resources:images/tiles/boxCrate_double.png", TILE_SCALING
+        #     )
+        #     wall.position = coordinate
+        #     self.scene.add_sprite("Walls", wall)
 
         # Use a loop to place some coins for our character to pick up
         for x in range(128, 1250, 256):
@@ -219,9 +200,9 @@ class GameView(arcade.View):
             self.scene.add_sprite("Coins", coin)
 
         # Create the 'physics engine'
-        self.physics_engine = arcade.PhysicsEnginePlatformer(
-            self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
-        )
+        # self.physics_engine = arcade.PhysicsEnginePlatformer(
+        #     self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
+        # )
 
         self.load_level(1)
 
@@ -262,9 +243,9 @@ class GameView(arcade.View):
 
         # Activate the game camera
         self.camera.use()
-        arcade.draw_lrwh_rectangle_textured(0, 0,
-                                            SCREEN_WIDTH, SCREEN_HEIGHT,
-                                            self.background)
+        # arcade.draw_lrwh_rectangle_textured(0, 0,
+        #                                     SCREEN_WIDTH, SCREEN_HEIGHT,
+        #                                     self.background)
         # Draw our Scene
         self.scene.draw()
 
@@ -384,13 +365,3 @@ class GameOverView(arcade.View):
         self.window.show_view(game_view)
 
 
-def main():
-    window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
-    window.total_score = 0
-    menu_view = MenuView()
-    window.show_view(menu_view)
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()
