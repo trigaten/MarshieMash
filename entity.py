@@ -71,6 +71,12 @@ class Entity(arcade.Sprite):
 class Player(Entity):
     def __init__(self, image, scale):
         super().__init__(image, scale)
+        if "blue" in image:
+            self.player_color = "blue" 
+        elif "green" in image:
+            self.player_color = "green" 
+        else:
+            self.player_color = "red"
 
 
     def update(self):
