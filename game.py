@@ -19,6 +19,7 @@ python -m arcade.examples.view_instructions_and_game_over.py
 """
 import arcade
 from entity import Player
+import math
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -414,20 +415,29 @@ class GameView(arcade.View):
                     bullet_scaling = SPRITE_SCALING_LASER/3
                     bullet_image = "assets/sword.png"
 
-                bullet = arcade.Sprite(
-                    bullet_image,
-                    bullet_scaling,
-                )
 
                 if self.player_sprite.facing_direction == RIGHT_FACING:
+                    bullet = arcade.Sprite(
+                                        bullet_image,
+                                        bullet_scaling,
+                    )
+
                     bullet.change_x = BULLET_SPEED
                 else:
+
+                    bullet = arcade.Sprite(
+                        bullet_image,
+                        bullet_scaling,
+                        flipped_horizontally=True
+                    )
                     bullet.change_x = -BULLET_SPEED
+
 
                 bullet.center_x = self.player_sprite.center_x
                 bullet.center_y = self.player_sprite.center_y
 
                 self.scene.add_sprite(LAYER_NAME_BULLETS, bullet)
+
 
                 self.can_shoot = False
         else:
