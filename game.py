@@ -131,7 +131,10 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
+<<<<<<< HEAD
 
+=======
+>>>>>>> cad16cb (map)
         map_name = ":resources:tiled_maps/map.json"
         #"/Users/sander/map.tmx"
         layer_options = {
