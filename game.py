@@ -428,7 +428,7 @@ class GameView(arcade.View):
 
             10,
 
-            10,
+            570,
 
             arcade.csscolor.WHITE,
 
@@ -605,8 +605,8 @@ class GameView(arcade.View):
 
         # Move the player with the physics engine
         self.physics_engine.update()
-
         if self.burnny.spawn_wait >= 100 and self.firstTimeVisiting[len(self.firstTimeVisiting)-1] == False:
+            # print(self.firstTimeVisiting)
             self.burnny.spawn_wait = 0
             enemy = Enemy("assets/enemy.png", 0.3)
             enemy.center_x = self.burnny.center_x + (0.5 - random.random()) * 400
@@ -800,16 +800,17 @@ class GameView(arcade.View):
         for collision in player_collision_list:
 
             if self.scene[LAYER_NAME_ENEMIES] in collision.sprite_lists or self.scene["BURNTONE"] in collision.sprite_lists:
+                found = False
                 for i in range(len(self.firstTimeVisiting)):
-                    if self.firstTimeVisiting[i] == True:
-                        if i > 0:
-                            self.player_sprite.center_x = self.inGameCoords[i-1][0]
-                            self.player_sprite.center_y = self.inGameCoords[i-1][1]
-                            break
-                        else:
-                            self.player_sprite.center_x = 64
-                            self.player_sprite.center_y = 200
-                            break
+                    if self.firstTimeVisiting[6-i] == False:
+                        self.player_sprite.center_x = self.inGameCoords[6-i][0]
+                        self.player_sprite.center_y = self.inGameCoords[6-i][1]
+                        found = True
+                        break
+
+                if not found:
+                    self.player_sprite.center_x = 64
+                    self.player_sprite.center_y = 200
             else:
                 arcade.play_sound(self.positivesound, looping= False)
 
