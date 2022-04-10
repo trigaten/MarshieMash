@@ -226,19 +226,8 @@ class GameView(arcade.View):
             coin.center_y = coinCoords[x][1]
             self.scene.add_sprite("Coins", coin)
 
-<<<<<<< HEAD
-        inGameCoords = [
-         (224, 226),
-         (1860, 218),
-         (3531, 427.25),
-         (5112, 806),
-         (6890, 486),
-         (9133, 1551),
-         (11533, 808)]
-=======
         # inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
         inGameCoords = [(799, 212), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
->>>>>>> origin/main
 
         for i in range(7):
             fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
@@ -702,16 +691,6 @@ class GameView(arcade.View):
                 arcade.play_sound(self.positivesound, looping= False)
 
 
-<<<<<<< HEAD
-=======
-                if (self.coffeeCounter > 0):
-                    self.coffeeCounter = self.coffeeCounter + 1
-                if (self.coffeeCounter > 20):
-                    self.coffeeCounter = 0
-                if (self.coffeeCounter == 0):
-                    self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
-
->>>>>>> origin/main
 
 
             # fireHit.pop()
@@ -724,18 +703,12 @@ class GameView(arcade.View):
             # self.window.show_view(gameview)
             # print('here')
         # Position the camera
-<<<<<<< HEAD
         if (self.scene.get_sprite_list('coffeeAlert')[0].alpha != 0):
             self.coffeeCounter = self.coffeeCounter + 1
         if (self.coffeeCounter > 20):
             self.coffeeCounter = 0
             self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
-=======
-        self.center_camera_to_player()
-        # print('(' +  str(self.player_sprite.center_x) + ', ' + str(self.player_sprite.center_y) + ')')
->>>>>>> origin/main
 
-        print(self.scene.get_sprite_list('coffeeAlert')[0].alpha)
         self.center_camera_to_player()
 
         # reset on fall off map
