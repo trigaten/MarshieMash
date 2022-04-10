@@ -91,6 +91,7 @@ class MenuView(arcade.View):
         self.score = 0
 
 
+
         # arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
@@ -152,6 +153,7 @@ class MenuView(arcade.View):
         self.scene.add_sprite("Map", map)
         # self.scene.add_sprite("Red", self.red)
     def stop_music(self):
+        print('stop')
         arcade.stop_sound(self.sounds)
 
     def on_draw(self):

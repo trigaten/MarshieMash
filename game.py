@@ -189,8 +189,11 @@ class GameView(arcade.View):
         # Set up the player, specifically placing it at these coordinates.
         player_types = {'Blue': 'assets/marshie_blue.png', 'Red': 'assets/marshie_red.png', 'Green': 'assets/marshie_green.png'}
         self.player_sprite = Player(player_types[self.player_type], 0.02)
-        self.player_sprite.center_x = 64
-        self.player_sprite.center_y = 200
+        # self.player_sprite.center_x = 64
+        # self.player_sprite.center_y = 200
+        self.player_sprite.center_x = 11000
+        self.player_sprite.center_y = 808
+        # (11533, 808)
         self.scene.add_sprite("Player", self.player_sprite)
 
 
@@ -402,9 +405,7 @@ class GameView(arcade.View):
 
         self.scene.add_sprite('Map', map)
 
-        self.scene.add_sprite('Pause', pause_background)
-        self.scene.add_sprite('Pause', continue_button)
-        self.scene.add_sprite('Pause', reset_button)
+
 
 
         mapCoords = [(130, 280), (205, 175), (350, 440),
@@ -419,6 +420,10 @@ class GameView(arcade.View):
             fire.visible = False
             self.scene.add_sprite('MapFire', fire)
 
+
+        self.scene.add_sprite('Pause', pause_background)
+        self.scene.add_sprite('Pause', continue_button)
+        self.scene.add_sprite('Pause', reset_button)
 
 
     def on_draw(self):
@@ -537,6 +542,7 @@ class GameView(arcade.View):
                 menu_view = MenuView()
                 # character_selection_view = CharacterSelection()
                 menu_view.setup()
+                menu_view.stop_music()
                 self.window.show_view(menu_view)
 
             if self.scene.get_sprite_list('Pause')[1] in characters:
