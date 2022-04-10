@@ -271,7 +271,7 @@ class GameView(arcade.View):
                     # -- Enemies
             enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
 
-
+            print(enemies_layer)
             for my_object in enemies_layer:
                 x1, y1 = my_object.shape[0]
                 # print(my_object.shape[0])
@@ -281,13 +281,13 @@ class GameView(arcade.View):
                     x1, y1
                 )
 
-                enemy = Enemy("assets/enemy.png", 0.1)
-                enemy.center_x = math.floor(
-                    cartesian[0] * TILE_SCALING #* self.tile_map.tile_width
-                )
-                enemy.center_y = math.floor(
+                enemy = Enemy("assets/enemy.png", 0.6)
+                enemy.center_x = my_object.shape[0] """math.floor(
+                    cartesian[0]  #* self.tile_map.tile_width
+                )"""
+                enemy.center_y = 3850 + cartesian[1] """math.floor(
                     abs((cartesian[1] + 1) * TILE_SCALING)#(self.tile_map.tile_height * TILE_SCALING))
-                )
+                )"""
                 print(enemy.center_x, enemy.center_y)
                 print(self.player_sprite.center_x, self.player_sprite.center_y)
                 print(cartesian[0],  TILE_SCALING, self.tile_map.tile_width)
@@ -335,6 +335,17 @@ class GameView(arcade.View):
         self.scene.add_sprite('Pause', pause_background)
         self.scene.add_sprite('Pause', continue_button)
         self.scene.add_sprite('Pause', reset_button)
+
+
+        self.coffeeAlertSprite =  arcade.Sprite("assets/CoffeeBreak.png", scale = 0.5, image_x= 0, image_y=2,
+                                        image_width=188, image_height=90)
+        self.background_music = arcade.load_sound("assets/sounds/campfire.mp3")
+        self.positivesound = arcade.load_sound("assets/sounds/positivesound.mp3")
+        arcade.play_sound(positivesound, looping= False)
+        self.coffeeAlertSprite.center_x = screen_center_x
+        self.coffeeAlertSprite.center_y = screen_center_y
+        self.scene.add_sprite("coffeeAlert", self.coffeeAlertSprite)
+        self.coffeeCounter = 0
 
     def on_draw(self):
         """Render the screen."""
@@ -528,6 +539,7 @@ class GameView(arcade.View):
             fireHit.pop()
             idx = self.inGameCoords.index((fire.center_x, fire.center_y))
             if (self.firstTimeVisiting[idx] == True):
+
                 fire = arcade.Sprite("assets/bitcamplogo_lit.png", 0.08)
                 fire.center_x = self.scene['MapFire'][idx].center_x
                 fire.center_y = self.scene['MapFire'][idx].center_y
@@ -537,6 +549,19 @@ class GameView(arcade.View):
                 # self.scene.add_sprite('MapFire', fire)
                 self.firstTimeVisiting[idx] = False
                 # self.campfireTracker += 1
+                arcade.play_sound(, looping= True)
+
+                self.coffeeCounter = 1
+            if (coffeeCounter > 0):
+                self.coffeeCounter = self.coffeeCounter + 1
+                self.scene.get_sprite_list('coffeeAlert')[0].alpha = 255
+
+            if (self.coffeeCounter > 100):
+                self.coffeeCounter = 0
+            if (self.coffeeCounter == 0):
+                self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
+
+
 
             # fireHit.pop()
 
