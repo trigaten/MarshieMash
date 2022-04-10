@@ -189,7 +189,7 @@ class GameView(arcade.View):
             coin.center_y = 96
             self.scene.add_sprite("Coins", coin)
 
-        inGameCoords = [(224, 226), (1860, 218), (3531, 427), (5000, 5000), (5000, 5000), (5000, 5000), (5000, 5000)]
+        inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
 
         for i in range(7):
             fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
