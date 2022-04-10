@@ -55,7 +55,7 @@ SPRITE_SCALING = 0.5
 #         # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
 #         map.alpha = 0
 #         self.scene.add_sprite('Map', map)
-        
+
 #     def on_mouse_press(self, _x, _y, _button, _modifiers):
 #         character_selection_view = CharacterSelection()
 #         character_selection_view.setup()
@@ -114,6 +114,8 @@ class MenuView(arcade.View):
         # Keep track of the score
 
         self.score = 0
+        self.background_music = arcade.load_sound("assets/sounds/Nowesind.mp3")
+        arcade.play_sound(self.background_music, looping= True)
 
         # Read in the tiled map
         # self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
@@ -140,7 +142,7 @@ class MenuView(arcade.View):
 
         map.center_x = 400
         map.center_y = 315
-        
+
 
         self.scene.add_sprite("Map", map)
         # self.scene.add_sprite("Red", self.red)
