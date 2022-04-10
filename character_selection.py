@@ -16,7 +16,7 @@ python -m arcade.examples.view_instructions_and_game_over.py
 """
 import arcade
 
-from game import GameView
+import game
 
 # Constants
 SCREEN_WIDTH = 800
@@ -295,6 +295,6 @@ class CharacterSelection(arcade.View):
                 color = 'Green'
             print('here')
             print('color: ' + str(color))
-            gameview = GameView(color)
+            gameview = game.GameView(color)
             gameview.setup()
             self.window.show_view(gameview)

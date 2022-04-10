@@ -22,6 +22,7 @@ import arcade
 from entity import Enemy
 from entity import Player
 import math
+from main import MenuView
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -172,6 +173,15 @@ class GameView(arcade.View):
 
         # # Initialize Scene
         # self.scene = arcade.Scene()
+        sign1 = arcade.Sprite('assets/sign.png',0.25)
+        sign1.center_x = 120
+        sign1.center_y = 308
+        self.scene.add_sprite("Signs", sign1)
+
+        sign2 = arcade.Sprite('assets/sign1.png',0.25)
+        sign2.center_x = 669
+        sign2.center_y = 402
+        self.scene.add_sprite("Signs", sign2)
 
         # Set up the player, specifically placing it at these coordinates.
         player_types = {'Blue': 'assets/marshie_blue.png', 'Red': 'assets/marshie_red.png', 'Green': 'assets/marshie_green.png'}
@@ -189,7 +199,8 @@ class GameView(arcade.View):
             coin.center_y = 96
             self.scene.add_sprite("Coins", coin)
 
-        inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
+        # inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
+        inGameCoords = [(799, 212), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
 
         for i in range(7):
             fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
@@ -229,6 +240,10 @@ class GameView(arcade.View):
             fire.alpha = 255
             fire.visible = False
             self.scene.add_sprite('MapFire', fire)
+
+        
+
+
 
 
 
@@ -287,10 +302,10 @@ class GameView(arcade.View):
                 enemy.center_y = math.floor(
                     abs((cartesian[1] + 1) * TILE_SCALING)#(self.tile_map.tile_height * TILE_SCALING))
                 )
-                print(enemy.center_x, enemy.center_y)
-                print(self.player_sprite.center_x, self.player_sprite.center_y)
-                print(cartesian[0],  TILE_SCALING, self.tile_map.tile_width)
-                print(cartesian)
+                # print(enemy.center_x, enemy.center_y)
+                # print(self.player_sprite.center_x, self.player_sprite.center_y)
+                # print(cartesian[0],  TILE_SCALING, self.tile_map.tile_width)
+                # print(cartesian)
                 # exit()
                 if "boundary_left" in my_object.properties:
                     enemy.boundary_left = my_object.properties["boundary_left"]
@@ -416,21 +431,42 @@ class GameView(arcade.View):
             self.showPause = False
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
+        screen_center_y = self.player_sprite.center_y - (self.camera.viewport_height / 2)
+
+        # print('mousepress (' + str(x) + ', ' + str(y) + ')')
+        # print('sprite0 loc (' + str(self.scene.get_sprite_list('Pause')[1].center_x) + ', ' + str(self.scene.get_sprite_list('Pause')[1].center_y) + ')')
+        # print('screen_center (' + str(screen_center_x) + ', ' + str(screen_center_y))
+        characters = []
+        if screen_center_y > 0:
+            characters = arcade.get_sprites_at_point((x+screen_center_x,y+screen_center_y), self.scene.get_sprite_list('Pause'))
+        elif screen_center_x > 0:
+            characters = arcade.get_sprites_at_point((x+screen_center_x,y), self.scene.get_sprite_list('Pause'))
+        else:
+            characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
+
         if len(characters) > 0:
             if self.scene.get_sprite_list('Pause')[2] in characters:
-                print("RESET")
+                # print("RESET")
                 self.showPause  =  False
                 self.scene.get_sprite_list('Pause')[0].alpha = 0
                 self.scene.get_sprite_list('Pause')[1].alpha = 0
                 self.scene.get_sprite_list('Pause')[2].alpha = 0
-                character_selection_view = character_selection.CharacterSelection()
-                character_selection_view.setup()
+                # character_selection_view = character_selection.CharacterSelection()
+                # character_selection_view.setup()
                 # window.show_view(menu_view)
                 self.clear()
 
-                self.window.show_view(character_selection_view)
-                arcade.run()
+                # self.window.show_view(character_selection_view)
+                # arcade.run()
+
+                # window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
+                # window.total_score = 0
+                menu_view = MenuView()
+                # character_selection_view = CharacterSelection()
+                menu_view.setup()
+                self.window.show_view(menu_view)
+                
             if self.scene.get_sprite_list('Pause')[1] in characters:
                 print("Continue")
                 self.scene.get_sprite_list('Pause')[0].alpha = 0
@@ -553,8 +589,20 @@ class GameView(arcade.View):
 
         # reset on fall off map
         if self.player_sprite.center_y < -100:
-            self.player_sprite.center_x = 64
-            self.player_sprite.center_y = 200
+            #GERSON
+            # print(self.firstTimeVisiting)
+            for i in range(len(self.firstTimeVisiting)):
+                if self.firstTimeVisiting[i] == True:
+                    if i > 0:
+                        self.player_sprite.center_x = self.inGameCoords[i-1][0]
+                        self.player_sprite.center_y = self.inGameCoords[i-1][1]
+                        # print(self.player_sprite.center_x)
+                        # print(self.player_sprite.center_y)
+                        break
+                    else:
+                        self.player_sprite.center_x = 64
+                        self.player_sprite.center_y = 200
+                        break
 
         ### BULLET STUFF
         if self.can_shoot:
