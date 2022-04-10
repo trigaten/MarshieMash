@@ -646,13 +646,11 @@ class GameView(arcade.View):
             fire = arcade.Sprite("assets/bitcamplogo_lit.png", 0.15)
             fire.center_x = fireHit[0].center_x
             fire.center_y = fireHit[0].center_y
-
-            fire.remove_from_sprite_lists()
-            self.scene.add_sprite('Fire', fire)
             fireHit.pop()
             idx = self.inGameCoords.index((fire.center_x, fire.center_y))
             if (self.firstTimeVisiting[idx] == True):
-
+                fire.remove_from_sprite_lists()
+                self.scene.add_sprite('Fire', fire)
                 fire = arcade.Sprite("assets/bitcamplogo_lit.png", 0.08)
                 fire.center_x = self.scene['MapFire'][idx].center_x
                 fire.center_y = self.scene['MapFire'][idx].center_y
@@ -661,7 +659,7 @@ class GameView(arcade.View):
                 # fire.remove_from_sprite_lists()
                 # self.scene.add_sprite('MapFire', fire)
                 self.firstTimeVisiting[idx] = False
-                # self.campfireTracker += 1
+                # self.campfireTracker = idx
 
                 self.coffeeCounter = self.coffeeCounter + 1
                 self.scene.get_sprite_list('coffeeAlert')[0].alpha = 255
@@ -669,12 +667,12 @@ class GameView(arcade.View):
                 arcade.play_sound(self.positivesound, looping= False)
 
 
-            if (self.coffeeCounter > 0):
-                self.coffeeCounter = self.coffeeCounter + 1
-            if (self.coffeeCounter > 20):
-                self.coffeeCounter = 0
-            if (self.coffeeCounter == 0):
-                self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
+                if (self.coffeeCounter > 0):
+                    self.coffeeCounter = self.coffeeCounter + 1
+                if (self.coffeeCounter > 20):
+                    self.coffeeCounter = 0
+                if (self.coffeeCounter == 0):
+                    self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
 
 
 
