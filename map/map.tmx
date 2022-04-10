@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="300" height="30" tilewidth="128" tileheight="128" infinite="0" nextlayerid="8" nextobjectid="11">
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="300" height="40" tilewidth="128" tileheight="128" infinite="0" nextlayerid="8" nextobjectid="11">
  <tileset firstgid="1" source="background.tsx"/>
  <tileset firstgid="7" source="Platforms.tsx"/>
- <layer id="1" name="Tile Layer 1" width="300" height="30">
+ <layer id="1" name="Tile Layer 1" width="300" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBcDjKAAAQ==
+   eJztwTEBAAAAwqD1T+1pCaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4Aa7gAAB
   </data>
  </layer>
- <layer id="2" name="background" width="300" height="30">
+ <layer id="2" name="background" width="300" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt3TEKwkAQBdDAmia9jV7Go+VoOZqNpRbJj3zE92DLz8yUCwMzTQAAAAAAAL9htBsAAADgsNaf7p5l1yC7BdnH0SwAAAAAAAAAAABwrhHs9Y1gn7BVtyWZF+CTa7sBAAAAAAAAAGCXpd0A8LcurwfAe7d2AwAAX5LcUBjBLYNW3TmoO5fmTW43hDcj1iALp3sC4iEICA==
+   eJzt3aENwzAQBVBLbkh4SUs6SkfLKBmlo5UUNiD+Sg7kPcnMX3eGlixfawAAAAAAAAAAAAAA5+mtrTv3v47pBAAAAAAAAMb06gYAAAAYVnWne2bZJch+gux7NAsAAAAAAABch/9kAADgHD1419eD94RVdask5wXYcq9uAAAAAAAAAADYZa5uALis228B8N+jugEAgIMkMxR6MMugqu4U1J2KzpvMbghnRixBdpj/ZNjyBQsQClo=
   </data>
  </layer>
- <layer id="6" name="midground" width="300" height="30" opacity="0.82">
+ <layer id="6" name="midground" width="300" height="40" opacity="0.82">
   <data encoding="base64" compression="zlib">
-   eJzt10EKgCAUQEFXHsL7HzTahaCYplbMbAyJcvX4hgDAH8TdBwB4kKYBAACQc1cEVtAaAIAxMVtb3gUAYC1zGHxTytZ8H2CnUotam3V3fxVzE/xPb5dGe1aiM0BNb4tq33KnBGZJhefZ/9rNPAdclVr4pm4B36QjAAAAAAAAAAAAAAAAAADA6QAnWwMB
+   eJzt10EKgCAQQFFXHaL7HzTaxYBSmprx3saQKFefMSUAAAAAAAAAAAAAAACAd2yzDwDwIk0DAAAgclcERtAaAIA2W1jvvAsAwFjmMFjTHta4DzBTrkV3m/V0fxRzE/xPbZdae5ajM0BJbYtK33KnBHrZM8+9/zWbeQ64yrXwS90C1qQjAAAAAAAAAAAAAAAAAADA6QBWOwMB
   </data>
  </layer>
- <layer id="4" name="Platforms" width="300" height="30">
+ <layer id="4" name="Platforms" width="300" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt2MsKwjAQBdAsCorvJ4j4+DU/xU/XjSChSClNp+o5mzIQJjebIWlKAAAAAAAAAAAAAAAAAAAAAAAAQLRjdACABl6zqkrpHpkD4JN9dACAQKfoAPDnttEBOuAfFfANImaVexbQVMkZVWVfgF/wfs86hKWA/zDJ6mnNmmVWrwtlaaL02y/iTvU80y1gWxi0TU/7fJopuw57Ab9l3ONeZgtQyiyr5zVrFlm9qlljTrXnLQgAwzaKDkBr50J9Lx31uXbUB14eUzcEGA==
+   eJzt2EtqwzAUBVAPAi1Nv/m0JTRpltalZKldSj0xGOGU1Eh+tXLOxAjE000GF9lNAwAAAAAAAAAAAAAAAAAAAACM9RodAAAAAAAAAABgIrumOUZnAOap7Y9Trjm5ZgHz1PVADV3gbgXzVkMPRfiIDgBXSmcBY+zizj0FHQ3MUNdVi6Du0FnAJbbRAXr01nlv0QGgUr4JQ6x1dIAMor5RAfxFRFe5Z0G9jpnnleyoRfIEqEH/nvUelgKuw12yXg7seUrWL4WyXKL0u1/Enar9TV8Bx8K/tpronN86ZZNxFlCX2wnP0i1AKffJ+mFgz2Oyfh7Yo6fGa/+77+gMAMB5N9EBGG1faO4h05zPTHOg8wMztgwT
   </data>
  </layer>
  <objectgroup id="7" name="Enemies">
-  <object id="8" x="3627.66" y="3269.36" width="117" height="127"/>
+  <object id="8" x="3627.66" y="4549.36" width="117" height="127"/>
  </objectgroup>
 </map>
