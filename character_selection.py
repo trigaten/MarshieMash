@@ -162,7 +162,6 @@ class CharacterSelection(arcade.View):
         # Keep track of the score
 
         self.score = 0
-
         # Read in the tiled map
         # self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
 

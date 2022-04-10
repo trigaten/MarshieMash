@@ -2,7 +2,7 @@ import math
 import os
 
 import arcade
-
+import random
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -141,3 +141,30 @@ class Enemy(Entity):
             return
 
         self.should_update_walk += 1
+
+
+class BurntOne(Entity):
+    def __init__(self, image, scale):
+        super().__init__(image, scale)
+        self.health = 500
+        self.should_update_walk = 0
+        self.min_x = 12713.0
+        self.min_y = 811.25
+        self.max_x = 15265.0
+
+        self.start_pos = (13817.0, 940.0)
+        self.x_delta = 3
+        self.spawn_wait = 0
+
+    def update(self):
+        if random.random() > 0.5:
+            self.center_x+=self.x_delta
+        else:
+            self.center_x-=self.x_delta
+
+            
+
+# class BurntBoi()
+    
+
+
