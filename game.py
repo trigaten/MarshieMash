@@ -25,7 +25,7 @@ import math
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
-SCREEN_TITLE = "Platformer"
+SCREEN_TITLE = "Marshie's Marshiful Adventure"
 TILE_SPRITE_SCALING = 0.5
 
 LAYER_NAME_MOVING_PLATFORMS = "Moving Platforms"
@@ -268,14 +268,15 @@ class GameView(arcade.View):
 
         enemy_locs = [(384.0, 258.0)]
         for loc in enemy_locs:
-            enemy = Enemy("assets/enemy.png", 0.3)
+            enemy = Enemy("assets/enemy.png", 0.2)
             x1, y1 = loc
             enemy.center_x = x1
             enemy.center_y = y1
             self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
-        burnny = BurntOne("assets/big_boi.png", 0.5)
-        burnny.center_x, burnny.center_y = burnny.start_pos
-        self.scene.add_sprite(LAYER_NAME_ENEMIES, burnny)
+        self.burnny = BurntOne("assets/big_boi.png", 0.5)
+        self.burnny.center_x, self.burnny.center_y = self.burnny.start_pos
+        self.scene.add_sprite("BURNTONE", self.burnny)
+
         try:
                     # -- Enemies
             enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
@@ -517,6 +518,23 @@ class GameView(arcade.View):
         # Move the player with the physics engine
         self.physics_engine.update()
 
+        # add checkpoint guard
+        if self.burnny.spawn_wait >= 100 and self.firstTimeVisiting[len(self.firstTimeVisiting)-1] == False:
+            self.burnny.spawn_wait = 0
+            enemy = Enemy("assets/enemy.png", 0.3)
+            enemy.center_x = self.burnny.center_x + (0.5 - random.random()) * 400
+            enemy.center_y = max(self.burnny.center_y + (0.5 - random.random()) * 400, self.burnny.min_y+10)
+            enemy.boundary_left = self.burnny.center_x-100
+            enemy.boundary_right = self.burnny.center_x+100
+            enemy.change_x = 5
+            #     if "boundary_right" in my_object.properties:
+            #         enemy.boundary_right = my_object.properties["boundary_right"]
+            #     if "change_x" in my_object.properties:
+            #         enemy.change_x = my_object.properties["change_x"]
+            # enemy.center_x
+            self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
+        else:
+            self.burnny.spawn_wait += 1
         # See if we hit any coins
         coin_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Coins"]
@@ -626,7 +644,7 @@ class GameView(arcade.View):
 
         # Update moving platforms, enemies, and bullets
         self.scene.update(
-            [LAYER_NAME_BULLETS, LAYER_NAME_ENEMIES]
+            [LAYER_NAME_BULLETS, LAYER_NAME_ENEMIES, "BURNTONE"]
         )
 
         # See if the enemy hit a boundary and needs to reverse direction.
@@ -650,6 +668,7 @@ class GameView(arcade.View):
             [
                 self.scene[LAYER_NAME_COINS],
                 self.scene[LAYER_NAME_ENEMIES],
+                self.scene["BURNTONE"]
             ],
         )
 
@@ -659,6 +678,7 @@ class GameView(arcade.View):
                 [
                     self.scene[LAYER_NAME_ENEMIES],
                     self.scene[LAYER_NAME_PLATFORMS],
+                    self.scene["BURNTONE"]
                 ],
             )
 # (1810.0, 214.75)/
@@ -669,7 +689,7 @@ class GameView(arcade.View):
                     if (
                         self.scene[LAYER_NAME_ENEMIES]
                         in collision.sprite_lists
-                    ):
+                    ) or self.scene["BURNTONE"] in collision.sprite_lists:
                         # The collision was with an enemy
                         collision.health -= BULLET_DAMAGE
 
@@ -693,7 +713,7 @@ class GameView(arcade.View):
                 # Loop through each coin we hit (if any) and remove it
         for collision in player_collision_list:
 
-            if self.scene[LAYER_NAME_ENEMIES] in collision.sprite_lists:
+            if self.scene[LAYER_NAME_ENEMIES] in collision.sprite_lists or self.scene["BURNTONE"] in collision.sprite_lists:
                 self.setup()
                 return
             else:
