@@ -115,7 +115,7 @@ class Player(Entity):
 class Enemy(Entity):
     def __init__(self, image, scale):
         super().__init__(image, scale)
-
+        self.health = 50
         self.should_update_walk = 0
 
     def update_animation(self, delta_time: float = 1 / 60):

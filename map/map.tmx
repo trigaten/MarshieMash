@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="300" height="20" tilewidth="128" tileheight="128" infinite="0" nextlayerid="8" nextobjectid="11">
+ <tileset firstgid="1" source="background.tsx"/>
+ <tileset firstgid="5" source="Platforms.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="300" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T+3sARQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADddwAAB
+  </data>
+ </layer>
+ <layer id="2" name="background" width="300" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztzrEJACAQA8AHLRzL0RzN0WzcwEIf7yBlSCIAAAAAAAAAAN5SIvpBd2bbBQAAAAAAAAAAuKXdPgB8q+4AAADwl3LWHdl2gbwW/U8DKQ==
+  </data>
+ </layer>
+ <layer id="6" name="midground" width="300" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T+3sARQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADddwAAB
+  </data>
+ </layer>
+ <layer id="4" name="Platforms" width="300" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztzisOgEAQRME1EP5w/9OiMJMNQexmEFWukxavFAAAAAAAAAAAAAAAAAAAAABam8KeK5897LNTC8Djyg4AeDFmBwA0sIS9Vj5b2EenFgCAPxqyAwA+ugHEswB4
+  </data>
+ </layer>
+ <objectgroup id="7" name="Enemies">
+  <object id="8" x="3627.66" y="1989.36" width="117" height="127"/>
+ </objectgroup>
+</map>
