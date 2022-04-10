@@ -23,6 +23,6 @@
   </data>
  </layer>
  <objectgroup id="7" name="Enemies">
-  <object id="8" x="3627.66" y="4549.36" width="117" height="127"/>
+  <object id="8" x="441.914" y="4602.61" width="117" height="127"/>
  </objectgroup>
 </map>

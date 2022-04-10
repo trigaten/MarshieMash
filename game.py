@@ -19,7 +19,7 @@ python -m arcade.examples.view_instructions_and_game_over.py
 """
 from re import L
 import arcade
-from entity import Enemy
+from entity import Enemy, BurntOne
 from entity import Player
 import math
 # Constants
@@ -266,6 +266,16 @@ class GameView(arcade.View):
         self.shoot_timer = 0
         self.shoot_pressed = False
 
+        enemy_locs = [(384.0, 258.0)]
+        for loc in enemy_locs:
+            enemy = Enemy("assets/enemy.png", 0.3)
+            x1, y1 = loc
+            enemy.center_x = x1
+            enemy.center_y = y1
+            self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
+        burnny = BurntOne("assets/big_boi.png", 0.5)
+        burnny.center_x, burnny.center_y = burnny.start_pos
+        self.scene.add_sprite(LAYER_NAME_ENEMIES, burnny)
         try:
                     # -- Enemies
             enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
@@ -280,17 +290,24 @@ class GameView(arcade.View):
                     x1, y1
                 )
 
-                enemy = Enemy("assets/enemy.png", 0.1)
+                enemy = Enemy("assets/enemy.png", 0.2)
                 enemy.center_x = math.floor(
-                    cartesian[0] * TILE_SCALING #* self.tile_map.tile_width
+                    x1/2#cartesian[0] #* TILE_SCALING * self.tile_map.tile_width * 0.5
                 )
                 enemy.center_y = math.floor(
-                    abs((cartesian[1] + 1) * TILE_SCALING)#(self.tile_map.tile_height * TILE_SCALING))
+                    y1/(-11)
+                    # abs((cartesian[1] + 1) * (self.tile_map.tile_height * TILE_SCALING)) * 0.5
                 )
+#                 (1783.0, 218.25)
+# (1783.0, 218.25)
+                print("LLLLL")
+                print(my_object.shape)
                 print(enemy.center_x, enemy.center_y)
+                print(x1, y1)
                 print(self.player_sprite.center_x, self.player_sprite.center_y)
                 print(cartesian[0],  TILE_SCALING, self.tile_map.tile_width)
                 print(cartesian)
+                # (264.0, 226.25)
                 # exit()
                 if "boundary_left" in my_object.properties:
                     enemy.boundary_left = my_object.properties["boundary_left"]
@@ -298,6 +315,8 @@ class GameView(arcade.View):
                     enemy.boundary_right = my_object.properties["boundary_right"]
                 if "change_x" in my_object.properties:
                     enemy.change_x = my_object.properties["change_x"]
+
+                print("DDDDDDDD", my_object.properties)
                 self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
         except Exception as e:
             raise e
@@ -637,9 +656,10 @@ class GameView(arcade.View):
                 bullet,
                 [
                     self.scene[LAYER_NAME_ENEMIES],
+                    self.scene[LAYER_NAME_PLATFORMS],
                 ],
             )
-
+# (1810.0, 214.75)/
             if hit_list:
                 bullet.remove_from_sprite_lists()
 
