@@ -13,7 +13,7 @@ os.chdir(file_path)
 
 
 #character selection
-from character_selection import CharacterSelection
+import character_selection
 
 WIDTH = 800
 HEIGHT = 600
@@ -201,7 +201,7 @@ class MenuView(arcade.View):
 
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-            characterselection = CharacterSelection()
+            characterselection = character_selection.CharacterSelection()
             characterselection.setup()
             self.window.show_view(characterselection)
 
