@@ -24,6 +24,7 @@ from entity import Player
 import math
 import random
 from main import MenuView
+from closing import ClosingView
 
 # Constants
 SCREEN_WIDTH = 1000
@@ -312,7 +313,7 @@ class GameView(arcade.View):
         self.burnny.center_x, self.burnny.center_y = self.burnny.start_pos
         self.scene.add_sprite("BURNTONE", self.burnny)
 
-        
+
                 # -- Enemies
         enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
 
@@ -342,10 +343,12 @@ class GameView(arcade.View):
         pause_background = arcade.Sprite("assets/scroll.png", scale = 1, image_x= 0, image_y=0,
         image_width=860, image_height=673)
 
-        continue_button = arcade.Sprite("assets/ContinueButton.png", scale = 0.5, image_x= 0, image_y=2,
+
+
+        continue_button = arcade.Sprite("assets/ContinueButton.png", scale = 0.4, image_x= 0, image_y=2,
                 image_width=250, image_height=90)
-        reset_button = arcade.Sprite("assets/ResetButton.png", scale = 0.5, image_x= 0, image_y=2,
-                                image_width=188, image_height=90)
+        reset_button = arcade.Sprite("assets/ResetButton.png", scale = 0.4, image_x= 0, image_y=2,
+                                image_width=520, image_height=90)
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
         screen_center_y = self.player_sprite.center_y - (
             self.camera.viewport_height / 2
@@ -362,6 +365,16 @@ class GameView(arcade.View):
         continue_button.center_y = screen_center_y - 200
         reset_button.center_y = screen_center_y - 200
 
+        self.end_screen = arcade.Sprite("assets/EndMessage.png", scale =0.8, image_x= 0, image_y=0,
+                        image_width=1000, image_height=800)
+        self.end_screen.center_x = screen_center_x
+        self.end_screen.center_y = screen_center_y
+        self.end_screen.alpha = 0
+        self.scene.add_sprite("end_screen", self.end_screen)
+        self.won_game = 0
+
+
+
         # #print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
         pause_background.alpha = 0
         continue_button.alpha = 0
@@ -373,7 +386,7 @@ class GameView(arcade.View):
 
 
         self.coffeeAlertSprite =  arcade.Sprite("assets/CoffeeBreak.png", scale = 0.4, image_x= 0, image_y=0,
-                                        image_width=520, image_height=123)
+                                        image_width=525, image_height=123)
         self.background_music = arcade.load_sound("assets/sounds/campfire.mp3")
         self.positivesound = arcade.load_sound("assets/sounds/positivesound.mp3")
         self.coffeeAlertSprite.center_x = screen_center_x
@@ -444,27 +457,27 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
+        if not self.showPause:
+            if key == arcade.key.UP or key == arcade.key.W:
+                if self.physics_engine.can_jump():
+                    self.player_sprite.change_y = PLAYER_JUMP_SPEED
+            elif key == arcade.key.LEFT or key == arcade.key.A:
+                self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+                self.player_sprite.facing_direction = LEFT_FACING
+                self.player_sprite.texture = self.player_sprite.left_texture
+            elif key == arcade.key.RIGHT or key == arcade.key.D:
+                self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+                self.player_sprite.facing_direction = RIGHT_FACING
+                self.player_sprite.texture = self.player_sprite.right_texture
 
-        if key == arcade.key.UP or key == arcade.key.W:
-            if self.physics_engine.can_jump():
-                self.player_sprite.change_y = PLAYER_JUMP_SPEED
-        elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
-            self.player_sprite.facing_direction = LEFT_FACING
-            self.player_sprite.texture = self.player_sprite.left_texture
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
-            self.player_sprite.facing_direction = RIGHT_FACING
-            self.player_sprite.texture = self.player_sprite.right_texture
 
+            if key == arcade.key.Q:
+                self.shoot_pressed = True
 
-        if key == arcade.key.Q:
-            self.shoot_pressed = True
-
-        if key == arcade.key.M:
-            self.scene.get_sprite_list('Map')[0].alpha = 215
-            for i in range(len(self.scene.get_sprite_list('MapFire'))):
-                self.scene.get_sprite_list('MapFire')[i].visible = True
+            if key == arcade.key.M:
+                self.scene.get_sprite_list('Map')[0].alpha = 215
+                for i in range(len(self.scene.get_sprite_list('MapFire'))):
+                    self.scene.get_sprite_list('MapFire')[i].visible = True
 
 
 
@@ -584,6 +597,8 @@ class GameView(arcade.View):
         self.scene.get_sprite_list('Pause')[0].center_y = screen_center_y + 300
         self.coffeeAlertSprite.center_x  = screen_center_x + 400
         self.coffeeAlertSprite.center_y  = screen_center_y + 300
+        self.end_screen.center_x  = screen_center_x + 400
+        self.end_screen.center_y  = screen_center_y + 300
 
         self.scene.get_sprite_list('Pause')[1].center_x = screen_center_x + 500
         self.scene.get_sprite_list('Pause')[2].center_x = screen_center_x + 300
@@ -605,6 +620,16 @@ class GameView(arcade.View):
         #print(self.player_sprite.center_x, self.player_sprite.center_y)
         # print(self.player_sprite.center_x, self.player_sprite.center_y)
         """Movement and game logic"""
+
+        if self.won_game > 0:
+            self.won_game = self.won_game +1
+            if self.won_game >= 500:
+                self.clear()
+                close_view = ClosingView()
+                #close_view.setup()
+                self.window.show_view(close_view)
+
+
 
         # Move the player with the physics engine
         self.physics_engine.update()
@@ -647,6 +672,7 @@ class GameView(arcade.View):
                 # self.campfireTracker = idx
 
                 self.coffeeCounter = self.coffeeCounter + 1
+
                 self.scene.get_sprite_list('coffeeAlert')[0].alpha = 255
                 arcade.play_sound(self.positivesound, looping= False)
 
@@ -665,7 +691,7 @@ class GameView(arcade.View):
         # Position the camera
         if (self.scene.get_sprite_list('coffeeAlert')[0].alpha != 0):
             self.coffeeCounter = self.coffeeCounter + 1
-        if (self.coffeeCounter > 20):
+        if (self.coffeeCounter > 50):
             self.coffeeCounter = 0
             self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
 
@@ -736,9 +762,10 @@ class GameView(arcade.View):
                 self.shoot_timer = 0
 
         # Update enemies and bullets
-        self.scene.update(
-            [LAYER_NAME_BULLETS, LAYER_NAME_ENEMIES, "BURNTONE"]
-        )
+        if (not self.showPause):
+            self.scene.update(
+                [LAYER_NAME_BULLETS, LAYER_NAME_ENEMIES, "BURNTONE"]
+            )
 
         # See if the enemy hit a boundary and needs to reverse direction.
         for enemy in self.scene[LAYER_NAME_ENEMIES]:
@@ -756,7 +783,7 @@ class GameView(arcade.View):
             ):
                 enemy.change_x *= -1
 
-        
+
 
         for bullet in self.scene[LAYER_NAME_BULLETS]:
             hit_list = arcade.check_for_collision_with_lists(
@@ -778,10 +805,14 @@ class GameView(arcade.View):
                     ) or self.scene["BURNTONE"] in collision.sprite_lists:
                         # The collision was with an enemy
                         collision.health -= BULLET_DAMAGE
-
+                        if self.scene["BURNTONE"] in collision.sprite_lists and collision.health <= 0:
+                            print("Boss Beat")
+                            self.end_screen.alpha = 255
+                            self.won_game = 1
                         if collision.health <= 0:
                             collision.remove_from_sprite_lists()
                             self.score += 100
+
 
                 return
 
