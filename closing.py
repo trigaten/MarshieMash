@@ -12,17 +12,16 @@ import os
 file_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(file_path)
 
-from game import GameView
 
 #character selection
-from character_selection import CharacterSelection
+from main import MenuView
 
 WIDTH = 800
 HEIGHT = 600
 SPRITE_SCALING = 0.5
 
 
-class MenuView(arcade.View):
+class ClosingView(arcade.View):
 
     def __init__(self):
         super().__init__()
@@ -36,6 +35,16 @@ class MenuView(arcade.View):
         self.background1 = arcade.Sprite("assets/jumping_marshies.png", scale = 0.37, image_x= 0, image_y=150,
                                      image_width=2160, image_height=1728)
         self.background1.set_position(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+        self.reset_button = arcade.Sprite("assets/ResetButton.png", scale = 0.5, image_x= 0, image_y=-3,
+                                        image_width=530, image_height=100)
+
+        self.reset_button.center_x = 200
+        self.reset_button.center_y = 100
+        self.reset_button.set_position(200, 100)
+        self.spritelist = arcade.SpriteList()
+        self.spritelist.append(self.reset_button)
+
+
 
 
     def on_show(self):
@@ -47,6 +56,7 @@ class MenuView(arcade.View):
                 # Draw the Sprite to the screen.
         self.background2.draw()
         self.background1.draw()
+        self.reset_button.draw()
         time.sleep(0.02)
 
         """arcade.draw_lrwh_rectangle_textured(0, 0,
@@ -69,9 +79,31 @@ class MenuView(arcade.View):
 
             else:
                 self.background1.visible = True
-
                 self.background2.visible = False
             self.viewBackground = not self.viewBackground
+
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+
+        characters = arcade.get_sprites_at_point((x,y), self.spritelist)
+        print(characters)
+        if len(characters) > 0:
+            if self.reset_button in characters:
+                print("RESET")
+
+                # character_selection_view = character_selection.CharacterSelection()
+                # character_selection_view.setup()
+                # window.show_view(menu_view)
+                self.clear()
+
+                # self.window.show_view(character_selection_view)
+                # arcade.run()
+
+                # window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
+                # window.total_score = 0
+                menu_view = MenuView()
+                menu_view.setup()
+                self.window.show_view(menu_view)
 
 
 
@@ -79,7 +111,7 @@ class MenuView(arcade.View):
 def main():
     window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
     window.total_score = 0
-    menu_view = MenuView()
+    menu_view = ClosingView()
     # character_selection_view = CharacterSelection()
     # character_selection_view.setup()
     window.show_view(menu_view)

@@ -24,6 +24,7 @@ from entity import Player
 import math
 import random
 from main import MenuView
+from closing import ClosingView
 
 # Constants
 SCREEN_WIDTH = 1000
@@ -360,10 +361,12 @@ class GameView(arcade.View):
         pause_background = arcade.Sprite("assets/scroll.png", scale = 1, image_x= 0, image_y=0,
         image_width=860, image_height=673)
 
-        continue_button = arcade.Sprite("assets/ContinueButton.png", scale = 0.5, image_x= 0, image_y=2,
+
+
+        continue_button = arcade.Sprite("assets/ContinueButton.png", scale = 0.4, image_x= 0, image_y=2,
                 image_width=250, image_height=90)
-        reset_button = arcade.Sprite("assets/ResetButton.png", scale = 0.5, image_x= 0, image_y=2,
-                                image_width=188, image_height=90)
+        reset_button = arcade.Sprite("assets/ResetButton.png", scale = 0.4, image_x= 0, image_y=2,
+                                image_width=520, image_height=90)
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
         screen_center_y = self.player_sprite.center_y - (
             self.camera.viewport_height / 2
@@ -380,6 +383,16 @@ class GameView(arcade.View):
         continue_button.center_y = screen_center_y - 200
         reset_button.center_y = screen_center_y - 200
 
+        self.end_screen = arcade.Sprite("assets/EndMessage.png", scale = 1, image_x= 0, image_y=0,
+                        image_width=1000, image_height=800)
+        self.end_screen.center_x = screen_center_x
+        self.end_screen.center_y = screen_center_y
+        self.end_screen.alpha = 0
+        self.scene.add_sprite("end_screen", self.end_screen)
+        self.won_game = 0
+
+
+
         # #print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
         pause_background.alpha = 0
         continue_button.alpha = 0
@@ -391,7 +404,7 @@ class GameView(arcade.View):
 
 
         self.coffeeAlertSprite =  arcade.Sprite("assets/CoffeeBreak.png", scale = 0.4, image_x= 0, image_y=0,
-                                        image_width=520, image_height=123)
+                                        image_width=525, image_height=123)
         self.background_music = arcade.load_sound("assets/sounds/campfire.mp3")
         self.positivesound = arcade.load_sound("assets/sounds/positivesound.mp3")
         self.coffeeAlertSprite.center_x = screen_center_x
@@ -584,6 +597,8 @@ class GameView(arcade.View):
         self.scene.get_sprite_list('Pause')[0].center_y = screen_center_y + 300
         self.coffeeAlertSprite.center_x  = screen_center_x + 400
         self.coffeeAlertSprite.center_y  = screen_center_y + 300
+        self.end_screen.center_x  = screen_center_x + 400
+        self.end_screen.center_y  = screen_center_y + 300
 
         self.scene.get_sprite_list('Pause')[1].center_x = screen_center_x + 500
         self.scene.get_sprite_list('Pause')[2].center_x = screen_center_x + 300
@@ -606,6 +621,16 @@ class GameView(arcade.View):
         # print(self.player_sprite.center_x, self.player_sprite.center_y)
         """Movement and game logic"""
 
+        if self.won_game > 0:
+            self.won_game = self.won_game +1
+            if self.won_game >= 100:
+                self.clear()
+                close_view = ClosingView()
+                close_view.setup()
+                self.window.show_view(close_view)
+
+
+
         # Move the player with the physics engine
         self.physics_engine.update()
 
@@ -618,11 +643,7 @@ class GameView(arcade.View):
             enemy.boundary_left = self.burnny.center_x-300
             enemy.boundary_right = self.burnny.center_x+100
             enemy.change_x = 5
-            #     if "boundary_right" in my_object.properties:
-            #         enemy.boundary_right = my_object.properties["boundary_right"]
-            #     if "change_x" in my_object.properties:
-            #         enemy.change_x = my_object.properties["change_x"]
-            # enemy.center_x
+
             self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
         else:
             if self.firstTimeVisiting[len(self.firstTimeVisiting)-1] == False:
@@ -829,6 +850,10 @@ class GameView(arcade.View):
                         if collision.health <= 0:
                             collision.remove_from_sprite_lists()
                             self.score += 100
+                    if self.scene["BURNTONE"] in collision.sprite_lists and collision.health <= 0:
+                        print("Boss Beat")
+                        self.end_screen.alpha = 255
+                        self.won_game = 1
 
                 return
 
