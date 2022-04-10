@@ -110,7 +110,7 @@ class GameView(arcade.View):
         self.player_sprite = None
 
         self.player_type = playerType
-        print('in init, playerType: ' + str(self.player_type))
+        #print('in init, playerType: ' + str(self.player_type))
 
 
 
@@ -224,7 +224,7 @@ class GameView(arcade.View):
         map.center_x = screen_center_x
         map.center_y = screen_center_y
 
-        # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
+        # #print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
         map.alpha = 0
         self.scene.add_sprite('Map', map)
 
@@ -252,7 +252,7 @@ class GameView(arcade.View):
         # fire.center_y = 100
 
 
-        # print('HERE')
+        # #print('HERE')
 
 
         # Create the 'physics engine'
@@ -281,7 +281,7 @@ class GameView(arcade.View):
         self.shoot_timer = 0
         self.shoot_pressed = False
 
-        enemy_locs = [(384.0, 258.0)]
+        enemy_locs = [(384.0, 158.0),(1810.0, 214.75),(849, 306),(2342, 485),(2757, 352),(4217, 741),(7744, 1832),(10889, 1529),(12457, 1701)]
         # enemies to add
         for loc in enemy_locs:
             enemy = Enemy("assets/enemy.png", 0.2)
@@ -353,7 +353,7 @@ class GameView(arcade.View):
         continue_button.center_y = screen_center_y - 200
         reset_button.center_y = screen_center_y - 200
 
-        # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
+        # #print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
         pause_background.alpha = 0
         continue_button.alpha = 0
         reset_button.alpha = 0
@@ -468,7 +468,7 @@ class GameView(arcade.View):
 
         if len(characters) > 0:
             if self.scene.get_sprite_list('Pause')[2] in characters:
-                # print("RESET")
+                # #print("RESET")
                 self.showPause  =  False
                 self.scene.get_sprite_list('Pause')[0].alpha = 0
                 self.scene.get_sprite_list('Pause')[1].alpha = 0
@@ -489,7 +489,6 @@ class GameView(arcade.View):
                 self.window.show_view(menu_view)
                 
             if self.scene.get_sprite_list('Pause')[1] in characters:
-                print("Continue")
                 self.scene.get_sprite_list('Pause')[0].alpha = 0
                 self.scene.get_sprite_list('Pause')[1].alpha = 0
                 self.scene.get_sprite_list('Pause')[2].alpha = 0
@@ -517,10 +516,8 @@ class GameView(arcade.View):
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
-        print(self.scene.sprite_lists)
         if len(characters) > 0:
             if self.scene.get_sprite_list('Pause')[2] in characters:
-                print("RESET")
                 self.showPause  =  False
                 self.scene.get_sprite_list('Pause')[0].alpha = 0
                 self.scene.get_sprite_list('Pause')[1].alpha = 0
@@ -533,7 +530,6 @@ class GameView(arcade.View):
                 self.window.show_view(character_selection_view)
                 arcade.run()
             if self.scene.get_sprite_list('Pause')[1] in characters:
-                print("Continue")
                 self.scene.get_sprite_list('Pause')[0].alpha = 0
                 self.scene.get_sprite_list('Pause')[1].alpha = 0
                 self.scene.get_sprite_list('Pause')[2].alpha = 0
@@ -549,7 +545,7 @@ class GameView(arcade.View):
         if screen_center_y < 0:
             screen_center_y = 0
         player_centered = screen_center_x, screen_center_y
-        # print('(' + str(screen_center_x) + ', ' + str(screen_center_y) + ')')
+        # #print('(' + str(screen_center_x) + ', ' + str(screen_center_y) + ')')
         self.camera.move_to(player_centered)
         self.scene.get_sprite_list('Pause')[0].center_x = screen_center_x + 400
         self.scene.get_sprite_list('Pause')[0].center_y = screen_center_y + 300
@@ -573,7 +569,7 @@ class GameView(arcade.View):
 
 
     def on_update(self, delta_time):
-        print(self.player_sprite.center_x, self.player_sprite.center_y)
+        #print(self.player_sprite.center_x, self.player_sprite.center_y)
         """Movement and game logic"""
 
         # Move the player with the physics engine
@@ -585,7 +581,7 @@ class GameView(arcade.View):
             enemy = Enemy("assets/enemy.png", 0.3)
             enemy.center_x = self.burnny.center_x + (0.5 - random.random()) * 400
             enemy.center_y = max(self.burnny.center_y + (0.5 - random.random()) * 400, self.burnny.min_y+10)
-            enemy.boundary_left = self.burnny.center_x-100
+            enemy.boundary_left = self.burnny.center_x-300
             enemy.boundary_right = self.burnny.center_x+100
             enemy.change_x = 5
             #     if "boundary_right" in my_object.properties:
@@ -595,7 +591,8 @@ class GameView(arcade.View):
             # enemy.center_x
             self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
         else:
-            self.burnny.spawn_wait += 1
+            if self.firstTimeVisiting[len(self.firstTimeVisiting)-1] == False:
+                self.burnny.spawn_wait += 1
         # See if we hit any coins
         coin_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Coins"]
@@ -623,8 +620,6 @@ class GameView(arcade.View):
                     if i > 0:
                         self.player_sprite.center_x = self.inGameCoords[i-1][0]
                         self.player_sprite.center_y = self.inGameCoords[i-1][1]
-                        # print(self.player_sprite.center_x)
-                        # print(self.player_sprite.center_y)
                         break
                     else:
                         self.player_sprite.center_x = 64
@@ -637,7 +632,7 @@ class GameView(arcade.View):
         
 
         if len(fireHit) > 0:
-            # print('LEVEL END')
+            # #print('LEVEL END')
             fire = arcade.Sprite("assets/bitcamplogo_lit.png", 0.15)
             fire.center_x = fireHit[0].center_x
             fire.center_y = fireHit[0].center_y
@@ -681,23 +676,23 @@ class GameView(arcade.View):
             # gameview = GameView1(self.player_type)
             # gameview.setup()
             # self.window.show_view(gameview)
-            # print('here')
+            # #print('here')
         # Position the camera
         self.center_camera_to_player()
-        # print('(' +  str(self.player_sprite.center_x) + ', ' + str(self.player_sprite.center_y) + ')')
+        # #print('(' +  str(self.player_sprite.center_x) + ', ' + str(self.player_sprite.center_y) + ')')
 
 
         # reset on fall off map
         if self.player_sprite.center_y < -100:
             #GERSON
-            # print(self.firstTimeVisiting)
+            # #print(self.firstTimeVisiting)
             for i in range(len(self.firstTimeVisiting)):
                 if self.firstTimeVisiting[i] == True:
                     if i > 0:
                         self.player_sprite.center_x = self.inGameCoords[i-1][0]
                         self.player_sprite.center_y = self.inGameCoords[i-1][1]
-                        # print(self.player_sprite.center_x)
-                        # print(self.player_sprite.center_y)
+                        # #print(self.player_sprite.center_x)
+                        # #print(self.player_sprite.center_y)
                         break
                     else:
                         self.player_sprite.center_x = 64
@@ -719,7 +714,7 @@ class GameView(arcade.View):
                 else:
                     bullet_scaling = SPRITE_SCALING_LASER/3
                     bullet_image = "assets/sword.png"
-
+                self.score-=1
 
                 if self.player_sprite.facing_direction == RIGHT_FACING:
                     bullet = arcade.Sprite(
@@ -817,7 +812,7 @@ class GameView(arcade.View):
     #         gameview = GameView1(self.player_type)
     #         gameview.setup()
     #         self.window.show_view(gameview)
-    #         print('here')
+    #         #print('here')
 
                 # Loop through each coin we hit (if any) and remove it
         for collision in player_collision_list:
@@ -828,7 +823,7 @@ class GameView(arcade.View):
             else:
                 # Figure out how many points this coin is worth
                 if "Points" not in collision.properties:
-                    print("Warning, collected a coin without a Points property.")
+                    #print("Warning, collected a coin without a Points property.")
                 else:
                     # points = int(collision.properties["Points"])
                     self.score += 1
