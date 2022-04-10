@@ -177,7 +177,7 @@ class GameView(arcade.View):
         player_types = {'Blue': 'assets/marshie_blue.png', 'Red': 'assets/marshie_red.png', 'Green': 'assets/marshie_green.png'}
         self.player_sprite = Player(player_types[self.player_type], 0.02)
         self.player_sprite.center_x = 64
-        self.player_sprite.center_y = 150
+        self.player_sprite.center_y = 200
         self.scene.add_sprite("Player", self.player_sprite)
 
 
@@ -555,7 +555,7 @@ class GameView(arcade.View):
         # reset on fall off map
         if self.player_sprite.center_y < -100:
             self.player_sprite.center_x = 64
-            self.player_sprite.center_y = 150
+            self.player_sprite.center_y = 200
 
         ### BULLET STUFF
         if self.can_shoot:
