@@ -328,35 +328,32 @@ class GameView(arcade.View):
         self.burnny.center_x, self.burnny.center_y = self.burnny.start_pos
         self.scene.add_sprite("BURNTONE", self.burnny)
 
-        try:
-                    # -- Enemies
-            enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
 
-            for my_object in enemies_layer:
-                x1, y1 = my_object.shape[0]
-                cartesian = self.tile_map.get_cartesian(
-                    x1, y1
-                )
+                # -- Enemies
+        enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
 
-                enemy = Enemy("assets/enemy.png", 0.2)
-                enemy.center_x = math.floor(
-                    x1/2#cartesian[0] #* TILE_SCALING * self.tile_map.tile_width * 0.5
-                )
-                enemy.center_y = math.floor(
-                    y1/(-11)
-                    # abs((cartesian[1] + 1) * (self.tile_map.tile_height * TILE_SCALING)) * 0.5
-                )
-                if "boundary_left" in my_object.properties:
-                    enemy.boundary_left = my_object.properties["boundary_left"]
-                if "boundary_right" in my_object.properties:
-                    enemy.boundary_right = my_object.properties["boundary_right"]
-                if "change_x" in my_object.properties:
-                    enemy.change_x = my_object.properties["change_x"]
+        for my_object in enemies_layer:
+            x1, y1 = my_object.shape[0]
+            cartesian = self.tile_map.get_cartesian(
+                x1, y1
+            )
 
-                self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
-        except Exception as e:
-            raise e
+            enemy = Enemy("assets/enemy.png", 0.2)
+            enemy.center_x = math.floor(
+                x1/2#cartesian[0] #* TILE_SCALING * self.tile_map.tile_width * 0.5
+            )
+            enemy.center_y = math.floor(
+                y1/(-11)
+                # abs((cartesian[1] + 1) * (self.tile_map.tile_height * TILE_SCALING)) * 0.5
+            )
+            if "boundary_left" in my_object.properties:
+                enemy.boundary_left = my_object.properties["boundary_left"]
+            if "boundary_right" in my_object.properties:
+                enemy.boundary_right = my_object.properties["boundary_right"]
+            if "change_x" in my_object.properties:
+                enemy.change_x = my_object.properties["change_x"]
 
+            self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
 
         pause_background = arcade.Sprite("assets/scroll.png", scale = 1, image_x= 0, image_y=0,
         image_width=860, image_height=673)
@@ -444,7 +441,7 @@ class GameView(arcade.View):
 
             10,
 
-            10,
+            570,
 
             arcade.csscolor.WHITE,
 
@@ -633,9 +630,8 @@ class GameView(arcade.View):
 
         # Move the player with the physics engine
         self.physics_engine.update()
-
-        # add checkpoint guard
         if self.burnny.spawn_wait >= 100 and self.firstTimeVisiting[len(self.firstTimeVisiting)-1] == False:
+            # print(self.firstTimeVisiting)
             self.burnny.spawn_wait = 0
             enemy = Enemy("assets/enemy.png", 0.3)
             enemy.center_x = self.burnny.center_x + (0.5 - random.random()) * 400
@@ -643,49 +639,14 @@ class GameView(arcade.View):
             enemy.boundary_left = self.burnny.center_x-300
             enemy.boundary_right = self.burnny.center_x+100
             enemy.change_x = 5
-
             self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
         else:
             if self.firstTimeVisiting[len(self.firstTimeVisiting)-1] == False:
                 self.burnny.spawn_wait += 1
-        # See if we hit any coins
-        coin_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.scene["Coins"]
-        )
-
-        # Loop through each coin we hit (if any) and remove it
-        for coin in coin_hit_list:
-            # Remove the coin
-            coin.remove_from_sprite_lists()
-            # Play a sound
-            # Add one to the score
-            arcade.play_sound(self.positivesound, looping= False)
-
-            self.score += 10
-
-        ENEMYHIT = arcade.check_for_collision_with_lists(
-            self.player_sprite, [
-                self.scene[LAYER_NAME_ENEMIES],
-                self.scene["BURNTONE"],
-            ]
-        )
-
-        if len(ENEMYHIT) > 0:
-            for i in range(len(self.firstTimeVisiting)):
-                if self.firstTimeVisiting[i] == True:
-                    if i > 0:
-                        self.player_sprite.center_x = self.inGameCoords[i-1][0]
-                        self.player_sprite.center_y = self.inGameCoords[i-1][1]
-                        break
-                    else:
-                        self.player_sprite.center_x = 64
-                        self.player_sprite.center_y = 200
-                        break
 
         fireHit = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Fire"]
         )
-
 
         if len(fireHit) > 0:
             # #print('LEVEL END')
@@ -796,7 +757,7 @@ class GameView(arcade.View):
                 self.can_shoot = True
                 self.shoot_timer = 0
 
-        # Update moving platforms, enemies, and bullets
+        # Update enemies and bullets
         self.scene.update(
             [LAYER_NAME_BULLETS, LAYER_NAME_ENEMIES, "BURNTONE"]
         )
@@ -817,14 +778,7 @@ class GameView(arcade.View):
             ):
                 enemy.change_x *= -1
 
-        player_collision_list = arcade.check_for_collision_with_lists(
-            self.player_sprite,
-            [
-                self.scene[LAYER_NAME_COINS],
-                self.scene[LAYER_NAME_ENEMIES],
-                self.scene["BURNTONE"]
-            ],
-        )
+
 
         for bullet in self.scene[LAYER_NAME_BULLETS]:
             hit_list = arcade.check_for_collision_with_lists(
@@ -862,25 +816,34 @@ class GameView(arcade.View):
                 > (self.tile_map.width * self.tile_map.tile_width) * TILE_SCALING
             ):
                 bullet.remove_from_sprite_lists()
-    # def on_mouse_press(self, _x, _y, _button, _modifiers):
-    #         gameview = GameView1(self.player_type)
-    #         gameview.setup()
-    #         self.window.show_view(gameview)
-    #         #print('here')
 
+        player_collision_list = arcade.check_for_collision_with_lists(
+            self.player_sprite,
+            [
+                self.scene[LAYER_NAME_COINS],
+                self.scene[LAYER_NAME_ENEMIES],
+                self.scene["BURNTONE"]
+            ],
+        )
                 # Loop through each coin we hit (if any) and remove it
         for collision in player_collision_list:
 
             if self.scene[LAYER_NAME_ENEMIES] in collision.sprite_lists or self.scene["BURNTONE"] in collision.sprite_lists:
-                self.setup()
-                return
+                found = False
+                for i in range(len(self.firstTimeVisiting)):
+                    if self.firstTimeVisiting[6-i] == False:
+                        self.player_sprite.center_x = self.inGameCoords[6-i][0]
+                        self.player_sprite.center_y = self.inGameCoords[6-i][1]
+                        found = True
+                        break
+
+                if not found:
+                    self.player_sprite.center_x = 64
+                    self.player_sprite.center_y = 200
             else:
-                # Figure out how many points this coin is worth
-                if "Points" not in collision.properties:
-                    print("Warning, collected a coin without a Points property.")
-                else:
-                    # points = int(collision.properties["Points"])
-                    self.score += 1
+                arcade.play_sound(self.positivesound, looping= False)
+
+                self.score += 10
 
                 # Remove the coin
                 collision.remove_from_sprite_lists()
