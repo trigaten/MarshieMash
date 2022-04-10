@@ -667,7 +667,7 @@ class GameView(arcade.View):
             # print('here')
         # Position the camera
         self.center_camera_to_player()
-        print('(' +  str(self.player_sprite.center_x) + ', ' + str(self.player_sprite.center_y) + ')')
+        # print('(' +  str(self.player_sprite.center_x) + ', ' + str(self.player_sprite.center_y) + ')')
 
 
         # reset on fall off map
