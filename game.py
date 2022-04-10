@@ -611,7 +611,7 @@ class GameView(arcade.View):
             # Play a sound
             # Add one to the score
 
-            self.score += 1
+            self.score += 10
 
 
 
