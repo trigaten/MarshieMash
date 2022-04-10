@@ -19,6 +19,7 @@ python -m arcade.examples.view_instructions_and_game_over.py
 """
 from re import L
 import arcade
+from entity import Enemy
 from entity import Player
 import math
 # Constants
@@ -137,8 +138,12 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
+<<<<<<< HEAD
+        map_name = "map/map.tmx"
+=======
 
         map_name = ":resources:tiled_maps/map.json"
+>>>>>>> main
         #"/Users/sander/map.tmx"
         layer_options = {
             "Platforms": {
@@ -265,6 +270,42 @@ class GameView(arcade.View):
         self.can_shoot = True
         self.shoot_timer = 0
         self.shoot_pressed = False
+
+        try:
+                    # -- Enemies
+            enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
+
+
+            for my_object in enemies_layer:
+                x1, y1 = my_object.shape[0]
+                # print(my_object.shape[0])
+                # print(my_object.shape[1])
+                # exit()
+                cartesian = self.tile_map.get_cartesian(
+                    x1, y1
+                )
+                
+                enemy = Enemy("assets/enemy.png", 0.1)
+                enemy.center_x = math.floor(
+                    cartesian[0] * TILE_SCALING #* self.tile_map.tile_width
+                )
+                enemy.center_y = math.floor(
+                    abs((cartesian[1] + 1) * TILE_SCALING)#(self.tile_map.tile_height * TILE_SCALING))
+                )
+                print(enemy.center_x, enemy.center_y)
+                print(self.player_sprite.center_x, self.player_sprite.center_y)
+                print(cartesian[0],  TILE_SCALING, self.tile_map.tile_width)
+                print(cartesian)
+                # exit()
+                if "boundary_left" in my_object.properties:
+                    enemy.boundary_left = my_object.properties["boundary_left"]
+                if "boundary_right" in my_object.properties:
+                    enemy.boundary_right = my_object.properties["boundary_right"]
+                if "change_x" in my_object.properties:
+                    enemy.change_x = my_object.properties["change_x"]
+                self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
+        except Exception as e:
+            raise e
 
 
         pause_background = arcade.Sprite("assets/scroll.png", scale = 1, image_x= 0, image_y=0,
@@ -569,33 +610,55 @@ class GameView(arcade.View):
 
         # Update moving platforms, enemies, and bullets
         self.scene.update(
-            [LAYER_NAME_BULLETS]
+            [LAYER_NAME_BULLETS, LAYER_NAME_ENEMIES]
         )
+
+        # See if the enemy hit a boundary and needs to reverse direction.
+        for enemy in self.scene[LAYER_NAME_ENEMIES]:
+            if (
+                enemy.boundary_right
+                and enemy.right > enemy.boundary_right
+                and enemy.change_x > 0
+            ):
+                enemy.change_x *= -1
+
+            if (
+                enemy.boundary_left
+                and enemy.left < enemy.boundary_left
+                and enemy.change_x < 0
+            ):
+                enemy.change_x *= -1
+
+        player_collision_list = arcade.check_for_collision_with_lists(
+            self.player_sprite,
+            [
+                self.scene[LAYER_NAME_COINS],
+                self.scene[LAYER_NAME_ENEMIES],
+            ],
+        )
+
         for bullet in self.scene[LAYER_NAME_BULLETS]:
             hit_list = arcade.check_for_collision_with_lists(
                 bullet,
                 [
-                    # self.scene[LAYER_NAME_MOVING_PLATFORMS],
+                    self.scene[LAYER_NAME_ENEMIES],
                 ],
             )
 
             if hit_list:
                 bullet.remove_from_sprite_lists()
 
-                # for collision in hit_list:
-                #     if (
-                #         self.scene[LAYER_NAME_ENEMIES]
-                #         in collision.sprite_lists
-                #     ):
-                #         # The collision was with an enemy
-                #         collision.health -= BULLET_DAMAGE
+                for collision in hit_list:
+                    if (
+                        self.scene[LAYER_NAME_ENEMIES]
+                        in collision.sprite_lists
+                    ):
+                        # The collision was with an enemy
+                        collision.health -= BULLET_DAMAGE
 
-                #         if collision.health <= 0:
-                #             collision.remove_from_sprite_lists()
-                #             self.score += 100
-
-                #         # Hit sound
-                #         arcade.play_sound(self.hit_sound)
+                        if collision.health <= 0:
+                            collision.remove_from_sprite_lists()
+                            self.score += 100
 
                 return
 
@@ -609,6 +672,26 @@ class GameView(arcade.View):
     #         gameview.setup()
     #         self.window.show_view(gameview)
     #         print('here')
+
+                # Loop through each coin we hit (if any) and remove it
+        for collision in player_collision_list:
+
+            if self.scene[LAYER_NAME_ENEMIES] in collision.sprite_lists:
+                self.setup()
+                return
+            else:
+                # Figure out how many points this coin is worth
+                if "Points" not in collision.properties:
+                    print("Warning, collected a coin without a Points property.")
+                else:
+                    # points = int(collision.properties["Points"])
+                    self.score += 1
+
+                # Remove the coin
+                collision.remove_from_sprite_lists()
+
+        # Position the camera
+        self.center_camera_to_player()
 
 
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="300" height="30" tilewidth="128" tileheight="128" infinite="0" nextlayerid="8" nextobjectid="11">
+ <tileset firstgid="1" source="background.tsx"/>
+ <tileset firstgid="7" source="Platforms.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="300" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBcDjKAAAQ==
+  </data>
+ </layer>
+ <layer id="2" name="background" width="300" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt3TEKwkAQBdDAmia9jV7Go+VoOZqNpRbJj3zE92DLz8yUCwMzTQAAAAAAAL9htBsAAADgsNaf7p5l1yC7BdnH0SwAAAAAAAAAAABwrhHs9Y1gn7BVtyWZF+CTa7sBAAAAAAAAAGCXpd0A8LcurwfAe7d2AwAAX5LcUBjBLYNW3TmoO5fmTW43hDcj1iALp3sC4iEICA==
+  </data>
+ </layer>
+ <layer id="6" name="midground" width="300" height="30" opacity="0.82">
+  <data encoding="base64" compression="zlib">
+   eJzt10EKgCAUQEFXHsL7HzTahaCYplbMbAyJcvX4hgDAH8TdBwB4kKYBAACQc1cEVtAaAIAxMVtb3gUAYC1zGHxTytZ8H2CnUotam3V3fxVzE/xPb5dGe1aiM0BNb4tq33KnBGZJhefZ/9rNPAdclVr4pm4B36QjAAAAAAAAAAAAAAAAAADA6QAnWwMB
+  </data>
+ </layer>
+ <layer id="4" name="Platforms" width="300" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt2MsKwjAQBdAsCorvJ4j4+DU/xU/XjSChSClNp+o5mzIQJjebIWlKAAAAAAAAAAAAAAAAAAAAAAAAQLRjdACABl6zqkrpHpkD4JN9dACAQKfoAPDnttEBOuAfFfANImaVexbQVMkZVWVfgF/wfs86hKWA/zDJ6mnNmmVWrwtlaaL02y/iTvU80y1gWxi0TU/7fJopuw57Ab9l3ONeZgtQyiyr5zVrFlm9qlljTrXnLQgAwzaKDkBr50J9Lx31uXbUB14eUzcEGA==
+  </data>
+ </layer>
+ <objectgroup id="7" name="Enemies">
+  <object id="8" x="3627.66" y="3269.36" width="117" height="127"/>
+ </objectgroup>
+</map>
