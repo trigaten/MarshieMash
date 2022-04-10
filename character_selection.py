@@ -179,7 +179,7 @@ class CharacterSelection(arcade.View):
         # Set up the player, specifically placing it at these coordinates.
         # self.player_sprite = arcade.Sprite(image_source, 0.02)
 
-        image_source = ["assets/big-chungus.png", "assets/marshie_red.png", "assets/marshie_green.png"]
+        image_source = ["assets/big-chungus.jpg", "assets/marshie_red.png", "assets/marshie_green.png"]
         self.blue = arcade.Sprite(image_source[0], 0.05)
 
         self.red = arcade.Sprite(image_source[1], 0.05)
