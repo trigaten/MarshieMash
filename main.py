@@ -218,12 +218,9 @@ def main():
     # character_selection_view = CharacterSelection()
     menu_view.setup()
     window.show_view(menu_view)
-<<<<<<< HEAD
     arcade.run()"""
-=======
     # window.show_view(character_selection_view)
     arcade.run()
->>>>>>> levelchange
 
 
 if __name__ == "__main__":

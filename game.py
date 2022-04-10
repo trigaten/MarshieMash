@@ -20,13 +20,7 @@ python -m arcade.examples.view_instructions_and_game_over.py
 from re import L
 import arcade
 from entity import Player
-<<<<<<< HEAD
 import math
-=======
-
-from level2 import GameView1
-import time
->>>>>>> levelchange
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -423,14 +417,11 @@ class GameView(arcade.View):
         if key == arcade.key.Q:
             self.shoot_pressed = False
 
-<<<<<<< HEAD
-=======
         if key == arcade.key.M:
             self.scene.get_sprite_list('Map')[0].alpha = 0
             for i in range(len(self.scene.get_sprite_list('MapFire'))):
                 self.scene.get_sprite_list('MapFire')[i].visible =False
 
->>>>>>> levelchange
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -444,7 +435,6 @@ class GameView(arcade.View):
         player_centered = screen_center_x, screen_center_y
         # print('(' + str(screen_center_x) + ', ' + str(screen_center_y) + ')')
         self.camera.move_to(player_centered)
-<<<<<<< HEAD
         self.scene.get_sprite_list('Pause')[0].center_x = screen_center_x + 400
         self.scene.get_sprite_list('Pause')[0].center_y = screen_center_y + 300
 
@@ -452,7 +442,6 @@ class GameView(arcade.View):
         self.scene.get_sprite_list('Pause')[2].center_x = screen_center_x + 300
         self.scene.get_sprite_list('Pause')[1].center_y = screen_center_y + 150
         self.scene.get_sprite_list('Pause')[2].center_y = screen_center_y + 150
-=======
         self.scene.get_sprite_list('Map')[0].center_x = screen_center_x + 400
         self.scene.get_sprite_list('Map')[0].center_y = screen_center_y + 300
 
@@ -464,7 +453,6 @@ class GameView(arcade.View):
             self.scene.get_sprite_list('MapFire')[i].center_x = screen_center_x + coords[i][0]
             self.scene.get_sprite_list('MapFire')[i].center_y = screen_center_y + coords[i][1]
 
->>>>>>> levelchange
 
     def on_update(self, delta_time):
         """Movement and game logic"""
