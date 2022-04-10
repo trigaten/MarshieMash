@@ -637,6 +637,7 @@ class GameView(arcade.View):
             coin.remove_from_sprite_lists()
             # Play a sound
             # Add one to the score
+            arcade.play_sound(self.positivesound, looping= False)
 
             self.score += 10
 
