@@ -189,11 +189,9 @@ class GameView(arcade.View):
         # Set up the player, specifically placing it at these coordinates.
         player_types = {'Blue': 'assets/marshie_blue.png', 'Red': 'assets/marshie_red.png', 'Green': 'assets/marshie_green.png'}
         self.player_sprite = Player(player_types[self.player_type], 0.02)
-        # self.player_sprite.center_x = 64
-        # self.player_sprite.center_y = 200
-        self.player_sprite.center_x = 11000
-        self.player_sprite.center_y = 808
-        # (11533, 808)
+        self.player_sprite.center_x = 64
+        self.player_sprite.center_y = 200
+        
         self.scene.add_sprite("Player", self.player_sprite)
 
 
