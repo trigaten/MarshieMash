@@ -9,7 +9,7 @@
  </layer>
  <layer id="2" name="background" width="300" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt3aENwzAQBVBLbkh4SUs6SkfLKBmlo5UUNiD+Sg7kPcnMX3eGlixfawAAAAAAAAAAAAAA5+mtrTv3v47pBAAAAAAAAMb06gYAAAAYVnWne2bZJch+gux7NAsAAAAAAABch/9kAADgHD1419eD94RVdask5wXYcq9uAAAAAAAAAADYZa5uALis228B8N+jugEAgIMkMxR6MMugqu4U1J2KzpvMbghnRixBdpj/ZNjyBQsQClo=
+   eJzt3bENwjAUBFBLJg09DTSMwmgZhVEYjQJKKOJT8ol4T0qXk7/TRbJ8rQEAAAAAAAAAAAAAbKe3dl/4/nWdSQAAAAAAAGBMrx4AAACAYVX/dJcsOwfZR5C9jWbXFn7P3WUBAAAAAADgl7lPBgAAttGDc309OE9YtW6VZL8A35yqBwAAAAAAAAAAFjlWDwD8rcP7AeCzc/UAAAArSToUetBlULXuFKw7Fe036W4IOyPmIDts7ftk9tgZoW/i5Qm/dgsy
   </data>
  </layer>
  <layer id="6" name="midground" width="300" height="40" opacity="0.82">
@@ -19,7 +19,7 @@
  </layer>
  <layer id="4" name="Platforms" width="300" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt2EtOAkEQBuBZEDUKvgVDfODNPApH9SjOZhLSDISM3VNO830b0qGpKlj8KaZpAAAAAAAAAACo0UWB9wAAAAAAAAAA2LeMHgAAAAAAAAAAYCTrptlEzwBMU5sf21x1ctUCpqnLgRqywG4F01ZDDkV4ix4AzpTMAoZYx/XdBrUGgg3Jne4zs6DskFnAKV6iB9ghtw5bRQ8AlfJMGGI9RQ+QQdQzKqBOm0J1I7LKngV/9xU9wEhKZtQseQWowe6e9Ro2BZyH6+R803PnLjk/nFC31P5T+r9fxE7VfqfvgLbwrz2O1OdYpjxnrAXU5WrEXrIFKGWenBc9d26T833PHTk1XPvb/UTPAAAcdhk9AIO9F6r7kanOZ6Y60PkFTakMeg==
+   eJzt2mtOg0AUBtD+aNT4fmsaH3VnLsWluBSX4lJEE5IGaaF0hgv0nIQ0U2DmlsCXgTKbAQAAAAAAAAAwRQcZ1gEAAAAAAAAA8N99dAEA/FlEFwDQwmImr4DhW8zkFTB8qznVNa+K/T7TVDPO8YH8qnOqsc6v5BVMXzWf5BXQpLjelgFjTiavfsks9lVx7n+k6idVXymte7YuryC9MgeGmAXb6ntutel/QHkF25tCDkV4aljf9M6CvIJuZFZabd6vkldMQdR5LLPSaPsuqLxiSLqcj+U+86DskFm72ea9dXnFmN1FF7BCbq33EF3AAMgrcmh6Jkyc4pr/Kpe674a01NT+2eOhGrWb6AISGPO9ADA8y0z9RmSVeRbs7i26gJ7kzKh55RNgClbnWY9hVcB+OK60T2q2uai0r1r0m2v+k/veL2JOVfym94BhYdCuexpnU6bcJuwLmJajHseSLUAup5X2Wc0255X2Zc02cqq74th9R9cAAKx3GF0AnT1n6vclUT+vifqB0g8D8Txk
   </data>
  </layer>
  <objectgroup id="7" name="Enemies">

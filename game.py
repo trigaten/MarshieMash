@@ -189,13 +189,12 @@ class GameView(arcade.View):
             coin.center_y = 96
             self.scene.add_sprite("Coins", coin)
 
-        inGameCoords = []
+        inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
 
-        for i in range(200, TOTALDISTANCE-200, (TOTALDISTANCE-200) // 7):
+        for i in range(7):
             fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
-            fire.center_x = i
-            fire.center_y = 100
-            inGameCoords.append((i, 100))
+            fire.center_x = inGameCoords[i][0]
+            fire.center_y = inGameCoords[i][1]
             self.scene.add_sprite('Fire', fire)
         # inGameCoords.reverse()
         self.inGameCoords = inGameCoords
@@ -551,7 +550,7 @@ class GameView(arcade.View):
             # print('here')
         # Position the camera
         self.center_camera_to_player()
-
+        print('(' +  str(self.player_sprite.center_x) + ', ' + str(self.player_sprite.center_y) + ')')
 
 
         # reset on fall off map
