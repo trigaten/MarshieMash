@@ -138,12 +138,8 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
-<<<<<<< HEAD
         map_name = "map/map.tmx"
-=======
 
-        map_name = ":resources:tiled_maps/map.json"
->>>>>>> main
         #"/Users/sander/map.tmx"
         layer_options = {
             "Platforms": {
@@ -221,7 +217,7 @@ class GameView(arcade.View):
         # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
         map.alpha = 0
         self.scene.add_sprite('Map', map)
-        
+
 
         mapCoords = [(130, 280), (205, 175), (350, 440),
                             (410, 250), (615, 350), (590, 430),
@@ -231,9 +227,9 @@ class GameView(arcade.View):
             fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.08)
             fire.center_x = mapCoords[i][0]
             fire.center_y = mapCoords[i][1]
-            fire.alpha = 255     
+            fire.alpha = 255
             fire.visible = False
-            self.scene.add_sprite('MapFire', fire) 
+            self.scene.add_sprite('MapFire', fire)
 
 
 
@@ -284,7 +280,7 @@ class GameView(arcade.View):
                 cartesian = self.tile_map.get_cartesian(
                     x1, y1
                 )
-                
+
                 enemy = Enemy("assets/enemy.png", 0.1)
                 enemy.center_x = math.floor(
                     cartesian[0] * TILE_SCALING #* self.tile_map.tile_width
@@ -400,7 +396,7 @@ class GameView(arcade.View):
 
         if key == arcade.key.Q:
             self.shoot_pressed = True
-        
+
         if key == arcade.key.M:
             self.scene.get_sprite_list('Map')[0].alpha = 215
             for i in range(len(self.scene.get_sprite_list('MapFire'))):
@@ -422,7 +418,7 @@ class GameView(arcade.View):
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
-        if self.showPause and (len(characters)) > 0:
+        if len(characters) > 0:
             if self.scene.get_sprite_list('Pause')[2] in characters:
                 print("RESET")
                 self.showPause  =  False
@@ -505,7 +501,7 @@ class GameView(arcade.View):
         coin_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Coins"]
         )
-        
+
         # Loop through each coin we hit (if any) and remove it
         for coin in coin_hit_list:
             # Remove the coin
@@ -545,7 +541,7 @@ class GameView(arcade.View):
             # fireHit.pop()
 
             # self.scene["Fire"][0]
-            
+
             # time.sleep(1)
             # gameview = GameView1(self.player_type)
             # gameview.setup()
