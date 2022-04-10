@@ -205,22 +205,21 @@ class MenuView(arcade.View):
 
 def main():
 
+    # window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
+    # window.total_score = 0# menu_view = MenuView()
+    # character_selection_view = CharacterSelection()
+    # character_selection_view.setup()
+    # # window.show_view(menu_view)
+    # window.show_view(character_selection_view)
+    # arcade.run()
     window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
-    window.total_score = 0# menu_view = MenuView()
-    character_selection_view = CharacterSelection()
-    character_selection_view.setup()
-    # window.show_view(menu_view)
-    window.show_view(character_selection_view)
-    arcade.run()
-    """    window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
     window.total_score = 0
     menu_view = MenuView()
     # character_selection_view = CharacterSelection()
     menu_view.setup()
     window.show_view(menu_view)
-    arcade.run()"""
-    # window.show_view(character_selection_view)
     arcade.run()
+    # window.show_view(character_selection_view)
 
 
 if __name__ == "__main__":
