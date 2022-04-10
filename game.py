@@ -282,12 +282,14 @@ class GameView(arcade.View):
         self.shoot_pressed = False
 
         enemy_locs = [(384.0, 258.0)]
+        # enemies to add
         for loc in enemy_locs:
             enemy = Enemy("assets/enemy.png", 0.2)
             x1, y1 = loc
             enemy.center_x = x1
             enemy.center_y = y1
             self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
+
         self.burnny = BurntOne("assets/big_boi.png", 0.5)
         self.burnny.center_x, self.burnny.center_y = self.burnny.start_pos
         self.scene.add_sprite("BURNTONE", self.burnny)
@@ -613,11 +615,31 @@ class GameView(arcade.View):
 
             self.score += 10
 
+        ENEMYHIT = arcade.check_for_collision_with_lists(
+            self.player_sprite, [
+                self.scene[LAYER_NAME_ENEMIES],
+                self.scene["BURNTONE"],
+            ]
+        )
 
-
+        if len(ENEMYHIT) > 0:
+            for i in range(len(self.firstTimeVisiting)):
+                if self.firstTimeVisiting[i] == True:
+                    if i > 0:
+                        self.player_sprite.center_x = self.inGameCoords[i-1][0]
+                        self.player_sprite.center_y = self.inGameCoords[i-1][1]
+                        # print(self.player_sprite.center_x)
+                        # print(self.player_sprite.center_y)
+                        break
+                    else:
+                        self.player_sprite.center_x = 64
+                        self.player_sprite.center_y = 200
+                        break
+                    
         fireHit = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Fire"]
         )
+        
 
         if len(fireHit) > 0:
             # print('LEVEL END')
