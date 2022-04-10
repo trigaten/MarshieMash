@@ -227,32 +227,8 @@ class GameView(arcade.View):
             coin.center_y = coinCoords[x][1]
             self.scene.add_sprite("Coins", coin)
 
-        # inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
-        inGameCoords = [(799, 212), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
 
-        for i in range(7):
-            fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
-            fire.center_x = inGameCoords[i][0]
-            fire.center_y = inGameCoords[i][1]
-            self.scene.add_sprite('Fire', fire)
-        # inGameCoords.reverse()
-        self.inGameCoords = inGameCoords
-
-
-
-
-        mapCoords = [(130, 280), (205, 175), (350, 440),
-                            (410, 250), (615, 350), (590, 430),
-                            (530, 230)]
-        self.mapCoords = mapCoords
-        for i in range(7):
-            fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.08)
-            fire.center_x = mapCoords[i][0]
-            fire.center_y = mapCoords[i][1]
-            fire.alpha = 255
-            fire.visible = False
-            self.scene.add_sprite('MapFire', fire)
-
+   
 
 
 
@@ -380,9 +356,9 @@ class GameView(arcade.View):
         continue_button.alpha = 0
         reset_button.alpha = 0
 
-        self.scene.add_sprite('Pause', pause_background)
-        self.scene.add_sprite('Pause', continue_button)
-        self.scene.add_sprite('Pause', reset_button)
+        # self.scene.add_sprite('Pause', pause_background)
+        # self.scene.add_sprite('Pause', continue_button)
+        # self.scene.add_sprite('Pause', reset_button)
 
 
         self.coffeeAlertSprite =  arcade.Sprite("assets/CoffeeBreak.png", scale = 0.4, image_x= 0, image_y=0,
@@ -394,6 +370,7 @@ class GameView(arcade.View):
         self.scene.add_sprite("coffeeAlert", self.coffeeAlertSprite)
         self.coffeeCounter = 0
         self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
+
 
         map = arcade.Sprite("assets/MAP.PNG", 0.4)
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -411,7 +388,38 @@ class GameView(arcade.View):
 
         # #print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
         map.alpha = 0
+        # self.scene.add_sprite('Map', map)
+        # inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
+        inGameCoords = [(799, 212), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
+
+        for i in range(7):
+            fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
+            fire.center_x = inGameCoords[i][0]
+            fire.center_y = inGameCoords[i][1]
+            self.scene.add_sprite('Fire', fire)
+        # inGameCoords.reverse()
+        self.inGameCoords = inGameCoords
+
         self.scene.add_sprite('Map', map)
+
+        self.scene.add_sprite('Pause', pause_background)
+        self.scene.add_sprite('Pause', continue_button)
+        self.scene.add_sprite('Pause', reset_button)
+
+
+        mapCoords = [(130, 280), (205, 175), (350, 440),
+                            (410, 250), (615, 350), (590, 430),
+                            (530, 230)]
+        self.mapCoords = mapCoords
+        for i in range(7):
+            fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.08)
+            fire.center_x = mapCoords[i][0]
+            fire.center_y = mapCoords[i][1]
+            fire.alpha = 255
+            fire.visible = False
+            self.scene.add_sprite('MapFire', fire)
+
+
 
     def on_draw(self):
         """Render the screen."""

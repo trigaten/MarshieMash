@@ -221,7 +221,7 @@ def main():
     # # window.show_view(menu_view)
     # window.show_view(character_selection_view)
     # arcade.run()
-    window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
+    window = arcade.Window(WIDTH, HEIGHT, "Marshie's Adventure")
     window.total_score = 0
     menu_view = MenuView()
     # character_selection_view = CharacterSelection()
