@@ -306,9 +306,6 @@ class GameView(arcade.View):
 
             for my_object in enemies_layer:
                 x1, y1 = my_object.shape[0]
-                # print(my_object.shape[0])
-                # print(my_object.shape[1])
-                # exit()
                 cartesian = self.tile_map.get_cartesian(
                     x1, y1
                 )
@@ -321,11 +318,6 @@ class GameView(arcade.View):
                     y1/(-11)
                     # abs((cartesian[1] + 1) * (self.tile_map.tile_height * TILE_SCALING)) * 0.5
                 )
-                # print(enemy.center_x, enemy.center_y)
-                # print(self.player_sprite.center_x, self.player_sprite.center_y)
-                # print(cartesian[0],  TILE_SCALING, self.tile_map.tile_width)
-                # print(cartesian)
-                # exit()
                 if "boundary_left" in my_object.properties:
                     enemy.boundary_left = my_object.properties["boundary_left"]
                 if "boundary_right" in my_object.properties:
@@ -333,7 +325,6 @@ class GameView(arcade.View):
                 if "change_x" in my_object.properties:
                     enemy.change_x = my_object.properties["change_x"]
 
-                print("DDDDDDDD", my_object.properties)
                 self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
         except Exception as e:
             raise e
@@ -466,9 +457,7 @@ class GameView(arcade.View):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
         screen_center_y = self.player_sprite.center_y - (self.camera.viewport_height / 2)
 
-        # print('mousepress (' + str(x) + ', ' + str(y) + ')')
-        # print('sprite0 loc (' + str(self.scene.get_sprite_list('Pause')[1].center_x) + ', ' + str(self.scene.get_sprite_list('Pause')[1].center_y) + ')')
-        # print('screen_center (' + str(screen_center_x) + ', ' + str(screen_center_y))
+       
         characters = []
         if screen_center_y > 0:
             characters = arcade.get_sprites_at_point((x+screen_center_x,y+screen_center_y), self.scene.get_sprite_list('Pause'))
@@ -584,6 +573,7 @@ class GameView(arcade.View):
 
 
     def on_update(self, delta_time):
+        print(self.player_sprite.center_x, self.player_sprite.center_y)
         """Movement and game logic"""
 
         # Move the player with the physics engine
