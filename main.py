@@ -11,7 +11,6 @@ import os
 file_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(file_path)
 
-from game import GameView
 
 #character selection
 from character_selection import CharacterSelection
@@ -46,13 +45,21 @@ class MenuView(arcade.View):
         self.window.show_view(character_selection_view)
 
 def main():
+
     window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
+    window.total_score = 0# menu_view = MenuView()
+    character_selection_view = CharacterSelection()
+    character_selection_view.setup()
+    # window.show_view(menu_view)
+    window.show_view(character_selection_view)
+    arcade.run()
+    """    window = arcade.Window(WIDTH, HEIGHT, "Different Views Example")
     window.total_score = 0
     menu_view = MenuView()
     # character_selection_view = CharacterSelection()
     # character_selection_view.setup()
     window.show_view(menu_view)
-    arcade.run()
+    arcade.run()"""
 
 
 if __name__ == "__main__":
