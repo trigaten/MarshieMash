@@ -288,7 +288,13 @@ class GameView(arcade.View):
             x1, y1 = loc
             enemy.center_x = x1
             enemy.center_y = y1
+            
+            enemy.boundary_left = x1-200
+            enemy.boundary_right = x1+200
+            enemy.change_x = 4
+
             self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
+
 
         self.burnny = BurntOne("assets/big_boi.png", 0.5)
         self.burnny.center_x, self.burnny.center_y = self.burnny.start_pos
@@ -298,7 +304,6 @@ class GameView(arcade.View):
                     # -- Enemies
             enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
 
-            print(enemies_layer)
             for my_object in enemies_layer:
                 x1, y1 = my_object.shape[0]
                 # print(my_object.shape[0])
@@ -635,7 +640,7 @@ class GameView(arcade.View):
                         self.player_sprite.center_x = 64
                         self.player_sprite.center_y = 200
                         break
-                    
+
         fireHit = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Fire"]
         )
