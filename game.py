@@ -17,9 +17,11 @@ all Views (see: total_score).
 If Python and Arcade are installed, this example can be run from the command line with:
 python -m arcade.examples.view_instructions_and_game_over.py
 """
+from re import L
 import arcade
 from entity import Enemy
 from entity import Player
+import math
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -59,12 +61,12 @@ PLAYER_JUMP_SPEED = 20
 # Constants used to track if the player is facing left or right
 RIGHT_FACING = 0
 LEFT_FACING = 1
-import arcade
 import random
 import os
 import random
 import math
-import arcade
+
+import character_selection
 
 SPRITE_SCALING = 0.5
 
@@ -85,6 +87,8 @@ SPRITE_SCALING = 0.5
 SCREEN_WIDTH = 1024.0
 SCREEN_HEIGHT = 600.0
 
+TOTALDISTANCE =  2600
+
 def text_drawer(self, text, x_coord, y_coord, font_size = 30, font_name = "Comic Sans MS",
                 color = arcade.color.WHITE):
     self.text_sprite = arcade.create_text_sprite(text, x_coord, y_coord,
@@ -103,16 +107,19 @@ class GameView(arcade.View):
 
         # Separate variable that holds the player sprite
         self.player_sprite = None
-        
+
         self.player_type = playerType
         print('in init, playerType: ' + str(self.player_type))
+
+
+
         # Our physics engine
         self.physics_engine = None
 
         # A Camera that can be used for scrolling the screen
         self.camera = None
 
-
+        self.showPause = False
         # A Camera that can be used to draw GUI elements
 
         self.gui_camera = None
@@ -123,12 +130,20 @@ class GameView(arcade.View):
 
         self.score = 0
 
-
+        self.campfireTracker = 0
+        self.firstTimeVisiting = [True] * 7
+        self.inGameCoords = []
+        self.mapCoords = []
         # arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
+<<<<<<< HEAD
         map_name = "map/map.tmx"
+=======
+
+        map_name = ":resources:tiled_maps/map.json"
+>>>>>>> main
         #"/Users/sander/map.tmx"
         layer_options = {
             "Platforms": {
@@ -169,12 +184,66 @@ class GameView(arcade.View):
         self.player_sprite.center_y = 96
         self.scene.add_sprite("Player", self.player_sprite)
 
+
+
         # Use a loop to place some coins for our character to pick up
         for x in range(128, 1250, 256):
             coin = arcade.Sprite(":resources:images/items/coinGold.png", COIN_SCALING)
             coin.center_x = x
             coin.center_y = 96
             self.scene.add_sprite("Coins", coin)
+
+        inGameCoords = []
+
+        for i in range(200, TOTALDISTANCE-200, (TOTALDISTANCE-200) // 7):
+            fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
+            fire.center_x = i
+            fire.center_y = 100
+            inGameCoords.append((i, 100))
+            self.scene.add_sprite('Fire', fire)
+        # inGameCoords.reverse()
+        self.inGameCoords = inGameCoords
+
+        map = arcade.Sprite("assets/MAP.PNG", 0.4)
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera.viewport_height / 2
+        )
+        if screen_center_x < 0:
+            screen_center_x = 0
+        if screen_center_y < 0:
+            screen_center_y = 0
+        player_centered = screen_center_x, screen_center_y
+
+        map.center_x = screen_center_x
+        map.center_y = screen_center_y
+
+        # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
+        map.alpha = 0
+        self.scene.add_sprite('Map', map)
+        
+
+        mapCoords = [(130, 280), (205, 175), (350, 440),
+                            (410, 250), (615, 350), (590, 430),
+                            (530, 230)]
+        self.mapCoords = mapCoords
+        for i in range(7):
+            fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.08)
+            fire.center_x = mapCoords[i][0]
+            fire.center_y = mapCoords[i][1]
+            fire.alpha = 255     
+            fire.visible = False
+            self.scene.add_sprite('MapFire', fire) 
+
+
+
+        # fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
+        # fire.center_x = 1800
+        # fire.center_y = 100
+
+
+        # print('HERE')
+
 
         # Create the 'physics engine'
         # self.physics_engine = arcade.PhysicsEnginePlatformer(
@@ -239,6 +308,37 @@ class GameView(arcade.View):
             raise e
 
 
+        pause_background = arcade.Sprite("assets/scroll.png", scale = 1, image_x= 0, image_y=0,
+        image_width=860, image_height=673)
+
+        continue_button = arcade.Sprite("assets/ContinueButton.png", scale = 0.5, image_x= 0, image_y=2,
+                image_width=250, image_height=90)
+        reset_button = arcade.Sprite("assets/ResetButton.png", scale = 0.5, image_x= 0, image_y=2,
+                                image_width=188, image_height=90)
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera.viewport_height / 2
+        )
+        if screen_center_x < 0:
+            screen_center_x = 0
+        if screen_center_y < 0:
+            screen_center_y = 0
+        player_centered = screen_center_x, screen_center_y
+        pause_background.center_x = screen_center_x
+        pause_background.center_y = screen_center_y
+        continue_button.center_x = screen_center_x + 100
+        reset_button.center_x = screen_center_x - 100
+        continue_button.center_y = screen_center_y - 200
+        reset_button.center_y = screen_center_y - 200
+
+        # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
+        pause_background.alpha = 0
+        continue_button.alpha = 0
+        reset_button.alpha = 0
+
+        self.scene.add_sprite('Pause', pause_background)
+        self.scene.add_sprite('Pause', continue_button)
+        self.scene.add_sprite('Pause', reset_button)
 
     def on_draw(self):
         """Render the screen."""
@@ -278,7 +378,7 @@ class GameView(arcade.View):
             18,
 
         )
-        
+
         # text_drawer(self, "The journeys of 1000 hackathons begins with 7 steps", 400, 400)
 
 
@@ -300,6 +400,52 @@ class GameView(arcade.View):
 
         if key == arcade.key.Q:
             self.shoot_pressed = True
+        
+        if key == arcade.key.M:
+            self.scene.get_sprite_list('Map')[0].alpha = 215
+            for i in range(len(self.scene.get_sprite_list('MapFire'))):
+                self.scene.get_sprite_list('MapFire')[i].visible = True
+
+
+
+
+        if key == arcade.key.P and not self.showPause:
+            self.scene.get_sprite_list('Pause')[0].alpha = 235
+            self.scene.get_sprite_list('Pause')[1].alpha = 235
+            self.scene.get_sprite_list('Pause')[2].alpha = 235
+            self.showPause = True
+        elif key == arcade.key.P:
+            self.scene.get_sprite_list('Pause')[0].alpha = 0
+            self.scene.get_sprite_list('Pause')[1].alpha = 0
+            self.scene.get_sprite_list('Pause')[2].alpha = 0
+            self.showPause = False
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
+        if self.showPause and (len(characters)) > 0:
+            if self.scene.get_sprite_list('Pause')[2] in characters:
+                print("RESET")
+                self.showPause  =  False
+                self.scene.get_sprite_list('Pause')[0].alpha = 0
+                self.scene.get_sprite_list('Pause')[1].alpha = 0
+                self.scene.get_sprite_list('Pause')[2].alpha = 0
+                character_selection_view = character_selection.CharacterSelection()
+                character_selection_view.setup()
+                # window.show_view(menu_view)
+                self.clear()
+
+                self.window.show_view(character_selection_view)
+                arcade.run()
+            if self.scene.get_sprite_list('Pause')[1] in characters:
+                print("Continue")
+                self.scene.get_sprite_list('Pause')[0].alpha = 0
+                self.scene.get_sprite_list('Pause')[1].alpha = 0
+                self.scene.get_sprite_list('Pause')[2].alpha = 0
+                self.showPause  =  False
+
+
+
+
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
@@ -312,6 +458,12 @@ class GameView(arcade.View):
         if key == arcade.key.Q:
             self.shoot_pressed = False
 
+        if key == arcade.key.M:
+            self.scene.get_sprite_list('Map')[0].alpha = 0
+            for i in range(len(self.scene.get_sprite_list('MapFire'))):
+                self.scene.get_sprite_list('MapFire')[i].visible =False
+
+
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
         screen_center_y = self.player_sprite.center_y - (
@@ -322,8 +474,26 @@ class GameView(arcade.View):
         if screen_center_y < 0:
             screen_center_y = 0
         player_centered = screen_center_x, screen_center_y
-
+        # print('(' + str(screen_center_x) + ', ' + str(screen_center_y) + ')')
         self.camera.move_to(player_centered)
+        self.scene.get_sprite_list('Pause')[0].center_x = screen_center_x + 400
+        self.scene.get_sprite_list('Pause')[0].center_y = screen_center_y + 300
+
+        self.scene.get_sprite_list('Pause')[1].center_x = screen_center_x + 500
+        self.scene.get_sprite_list('Pause')[2].center_x = screen_center_x + 300
+        self.scene.get_sprite_list('Pause')[1].center_y = screen_center_y + 150
+        self.scene.get_sprite_list('Pause')[2].center_y = screen_center_y + 150
+        self.scene.get_sprite_list('Map')[0].center_x = screen_center_x + 400
+        self.scene.get_sprite_list('Map')[0].center_y = screen_center_y + 300
+
+
+        coords = [(130, 280), (205, 175), (350, 440),
+                                    (410, 250),  (590, 430),(615, 350),
+                                    (530, 230)]
+        for i in range(7):
+            self.scene.get_sprite_list('MapFire')[i].center_x = screen_center_x + coords[i][0]
+            self.scene.get_sprite_list('MapFire')[i].center_y = screen_center_y + coords[i][1]
+
 
     def on_update(self, delta_time):
         """Movement and game logic"""
@@ -335,7 +505,7 @@ class GameView(arcade.View):
         coin_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.scene["Coins"]
         )
-
+        
         # Loop through each coin we hit (if any) and remove it
         for coin in coin_hit_list:
             # Remove the coin
@@ -346,8 +516,45 @@ class GameView(arcade.View):
             self.score += 1
 
 
+
+        fireHit = arcade.check_for_collision_with_list(
+            self.player_sprite, self.scene["Fire"]
+        )
+
+        if len(fireHit) > 0:
+            # print('LEVEL END')
+            fire = arcade.Sprite("assets/bitcamplogo_lit.png", 0.15)
+            fire.center_x = fireHit[0].center_x
+            fire.center_y = fireHit[0].center_y
+
+            fire.remove_from_sprite_lists()
+            self.scene.add_sprite('Fire', fire)
+            fireHit.pop()
+            idx = self.inGameCoords.index((fire.center_x, fire.center_y))
+            if (self.firstTimeVisiting[idx] == True):
+                fire = arcade.Sprite("assets/bitcamplogo_lit.png", 0.08)
+                fire.center_x = self.scene['MapFire'][idx].center_x
+                fire.center_y = self.scene['MapFire'][idx].center_y
+                fire.visible = self.scene['MapFire'][idx].visible
+                self.scene['MapFire'][idx] = fire
+                # fire.remove_from_sprite_lists()
+                # self.scene.add_sprite('MapFire', fire)
+                self.firstTimeVisiting[idx] = False
+                # self.campfireTracker += 1
+
+            # fireHit.pop()
+
+            # self.scene["Fire"][0]
+            
+            # time.sleep(1)
+            # gameview = GameView1(self.player_type)
+            # gameview.setup()
+            # self.window.show_view(gameview)
+            # print('here')
         # Position the camera
         self.center_camera_to_player()
+
+
 
         # reset on fall off map
         if self.player_sprite.center_y < -100:
@@ -359,7 +566,7 @@ class GameView(arcade.View):
             if self.shoot_pressed:
                 # SANDER BULLET CODE
                 bullet_image = None
-               
+
                 if self.player_sprite.player_color == "blue":
                     bullet_scaling = SPRITE_SCALING_LASER/10
                     bullet_image = "assets/owl.png"
@@ -370,20 +577,29 @@ class GameView(arcade.View):
                     bullet_scaling = SPRITE_SCALING_LASER/3
                     bullet_image = "assets/sword.png"
 
-                bullet = arcade.Sprite(
-                    bullet_image,
-                    bullet_scaling,
-                )
 
                 if self.player_sprite.facing_direction == RIGHT_FACING:
+                    bullet = arcade.Sprite(
+                                        bullet_image,
+                                        bullet_scaling,
+                    )
+
                     bullet.change_x = BULLET_SPEED
                 else:
+
+                    bullet = arcade.Sprite(
+                        bullet_image,
+                        bullet_scaling,
+                        flipped_horizontally=True
+                    )
                     bullet.change_x = -BULLET_SPEED
+
 
                 bullet.center_x = self.player_sprite.center_x
                 bullet.center_y = self.player_sprite.center_y
 
                 self.scene.add_sprite(LAYER_NAME_BULLETS, bullet)
+
 
                 self.can_shoot = False
         else:
@@ -451,6 +667,11 @@ class GameView(arcade.View):
                 > (self.tile_map.width * self.tile_map.tile_width) * TILE_SCALING
             ):
                 bullet.remove_from_sprite_lists()
+    # def on_mouse_press(self, _x, _y, _button, _modifiers):
+    #         gameview = GameView1(self.player_type)
+    #         gameview.setup()
+    #         self.window.show_view(gameview)
+    #         print('here')
 
                 # Loop through each coin we hit (if any) and remove it
         for collision in player_collision_list:
@@ -471,6 +692,7 @@ class GameView(arcade.View):
 
         # Position the camera
         self.center_camera_to_player()
+
 
 
 class GameOverView(arcade.View):
