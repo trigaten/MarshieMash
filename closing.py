@@ -103,6 +103,7 @@ class ClosingView(arcade.View):
                 # window.total_score = 0
                 menu_view = MenuView()
                 menu_view.setup()
+                menu_view.stop_music()
                 self.window.show_view(menu_view)
 
 

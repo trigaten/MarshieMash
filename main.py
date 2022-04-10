@@ -114,8 +114,13 @@ class MenuView(arcade.View):
         # Keep track of the score
 
         self.score = 0
+
+        try:
+            self.background_music.stop()
+        except Exception as e:
+            print("ooop")
         self.background_music = arcade.load_sound("assets/sounds/Nowesind.mp3")
-        arcade.play_sound(self.background_music, looping= True)
+        self.sounds = arcade.play_sound(self.background_music, looping= True)
 
         # Read in the tiled map
         # self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
@@ -146,6 +151,8 @@ class MenuView(arcade.View):
 
         self.scene.add_sprite("Map", map)
         # self.scene.add_sprite("Red", self.red)
+    def stop_music(self):
+        arcade.stop_sound(self.sounds)
 
     def on_draw(self):
         """Render the screen."""

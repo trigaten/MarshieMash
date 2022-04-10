@@ -380,7 +380,7 @@ class GameView(arcade.View):
         continue_button.center_y = screen_center_y - 200
         reset_button.center_y = screen_center_y - 200
 
-        self.end_screen = arcade.Sprite("assets/EndMessage.png", scale = 1, image_x= 0, image_y=0,
+        self.end_screen = arcade.Sprite("assets/EndMessage.png", scale =0.8, image_x= 0, image_y=0,
                         image_width=1000, image_height=800)
         self.end_screen.center_x = screen_center_x
         self.end_screen.center_y = screen_center_y
@@ -454,27 +454,27 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
+        if not self.showPause:
+            if key == arcade.key.UP or key == arcade.key.W:
+                if self.physics_engine.can_jump():
+                    self.player_sprite.change_y = PLAYER_JUMP_SPEED
+            elif key == arcade.key.LEFT or key == arcade.key.A:
+                self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+                self.player_sprite.facing_direction = LEFT_FACING
+                self.player_sprite.texture = self.player_sprite.left_texture
+            elif key == arcade.key.RIGHT or key == arcade.key.D:
+                self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+                self.player_sprite.facing_direction = RIGHT_FACING
+                self.player_sprite.texture = self.player_sprite.right_texture
 
-        if key == arcade.key.UP or key == arcade.key.W:
-            if self.physics_engine.can_jump():
-                self.player_sprite.change_y = PLAYER_JUMP_SPEED
-        elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
-            self.player_sprite.facing_direction = LEFT_FACING
-            self.player_sprite.texture = self.player_sprite.left_texture
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
-            self.player_sprite.facing_direction = RIGHT_FACING
-            self.player_sprite.texture = self.player_sprite.right_texture
 
+            if key == arcade.key.Q:
+                self.shoot_pressed = True
 
-        if key == arcade.key.Q:
-            self.shoot_pressed = True
-
-        if key == arcade.key.M:
-            self.scene.get_sprite_list('Map')[0].alpha = 215
-            for i in range(len(self.scene.get_sprite_list('MapFire'))):
-                self.scene.get_sprite_list('MapFire')[i].visible = True
+            if key == arcade.key.M:
+                self.scene.get_sprite_list('Map')[0].alpha = 215
+                for i in range(len(self.scene.get_sprite_list('MapFire'))):
+                    self.scene.get_sprite_list('MapFire')[i].visible = True
 
 
 
@@ -620,10 +620,10 @@ class GameView(arcade.View):
 
         if self.won_game > 0:
             self.won_game = self.won_game +1
-            if self.won_game >= 100:
+            if self.won_game >= 500:
                 self.clear()
                 close_view = ClosingView()
-                close_view.setup()
+                #close_view.setup()
                 self.window.show_view(close_view)
 
 
@@ -669,6 +669,7 @@ class GameView(arcade.View):
                 # self.campfireTracker = idx
 
                 self.coffeeCounter = self.coffeeCounter + 1
+
                 self.scene.get_sprite_list('coffeeAlert')[0].alpha = 255
                 arcade.play_sound(self.positivesound, looping= False)
 
@@ -687,7 +688,7 @@ class GameView(arcade.View):
         # Position the camera
         if (self.scene.get_sprite_list('coffeeAlert')[0].alpha != 0):
             self.coffeeCounter = self.coffeeCounter + 1
-        if (self.coffeeCounter > 20):
+        if (self.coffeeCounter > 50):
             self.coffeeCounter = 0
             self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
 
@@ -758,9 +759,10 @@ class GameView(arcade.View):
                 self.shoot_timer = 0
 
         # Update enemies and bullets
-        self.scene.update(
-            [LAYER_NAME_BULLETS, LAYER_NAME_ENEMIES, "BURNTONE"]
-        )
+        if (not self.showPause):
+            self.scene.update(
+                [LAYER_NAME_BULLETS, LAYER_NAME_ENEMIES, "BURNTONE"]
+            )
 
         # See if the enemy hit a boundary and needs to reverse direction.
         for enemy in self.scene[LAYER_NAME_ENEMIES]:
@@ -800,14 +802,14 @@ class GameView(arcade.View):
                     ) or self.scene["BURNTONE"] in collision.sprite_lists:
                         # The collision was with an enemy
                         collision.health -= BULLET_DAMAGE
-
+                        if self.scene["BURNTONE"] in collision.sprite_lists and collision.health <= 0:
+                            print("Boss Beat")
+                            self.end_screen.alpha = 255
+                            self.won_game = 1
                         if collision.health <= 0:
                             collision.remove_from_sprite_lists()
                             self.score += 100
-                    if self.scene["BURNTONE"] in collision.sprite_lists and collision.health <= 0:
-                        print("Boss Beat")
-                        self.end_screen.alpha = 255
-                        self.won_game = 1
+
 
                 return
 
