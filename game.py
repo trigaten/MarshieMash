@@ -282,12 +282,10 @@ class GameView(arcade.View):
                 )
 
                 enemy = Enemy("assets/enemy.png", 0.6)
-                enemy.center_x = my_object.shape[0] """math.floor(
-                    cartesian[0]  #* self.tile_map.tile_width
-                )"""
-                enemy.center_y = 3850 + cartesian[1] """math.floor(
-                    abs((cartesian[1] + 1) * TILE_SCALING)#(self.tile_map.tile_height * TILE_SCALING))
-                )"""
+                enemy.center_x = my_object.shape[0]
+
+                enemy.center_y = 3850 + cartesian[1]
+
                 print(enemy.center_x, enemy.center_y)
                 print(self.player_sprite.center_x, self.player_sprite.center_y)
                 print(cartesian[0],  TILE_SCALING, self.tile_map.tile_width)
@@ -341,7 +339,7 @@ class GameView(arcade.View):
                                         image_width=188, image_height=90)
         self.background_music = arcade.load_sound("assets/sounds/campfire.mp3")
         self.positivesound = arcade.load_sound("assets/sounds/positivesound.mp3")
-        arcade.play_sound(positivesound, looping= False)
+        arcade.play_sound(background_music, looping= True)
         self.coffeeAlertSprite.center_x = screen_center_x
         self.coffeeAlertSprite.center_y = screen_center_y
         self.scene.add_sprite("coffeeAlert", self.coffeeAlertSprite)
@@ -549,7 +547,7 @@ class GameView(arcade.View):
                 # self.scene.add_sprite('MapFire', fire)
                 self.firstTimeVisiting[idx] = False
                 # self.campfireTracker += 1
-                arcade.play_sound(, looping= True)
+                arcade.play_sound(positivesound, looping= True)
 
                 self.coffeeCounter = 1
             if (coffeeCounter > 0):
