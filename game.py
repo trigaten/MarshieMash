@@ -457,7 +457,10 @@ class GameView(arcade.View):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
         screen_center_y = self.player_sprite.center_y - (self.camera.viewport_height / 2)
 
-       
+        
+        # print('mousepress (' + str(x) + ', ' + str(y) + ')')
+        # print('sprite0 loc (' + str(self.scene.get_sprite_list('Pause')[1].center_x) + ', ' + str(self.scene.get_sprite_list('Pause')[1].center_y) + ')')
+        # print('screen_center (' + str(screen_center_x) + ', ' + str(screen_center_y))
         characters = []
         if screen_center_y > 0:
             characters = arcade.get_sprites_at_point((x+screen_center_x,y+screen_center_y), self.scene.get_sprite_list('Pause'))
@@ -515,29 +518,29 @@ class GameView(arcade.View):
             for i in range(len(self.scene.get_sprite_list('MapFire'))):
                 self.scene.get_sprite_list('MapFire')[i].visible =False
 
-    def on_mouse_press(self, x, y, button, key_modifiers):
-        characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
-        print(self.scene.sprite_lists)
-        if len(characters) > 0:
-            if self.scene.get_sprite_list('Pause')[2] in characters:
-                print("RESET")
-                self.showPause  =  False
-                self.scene.get_sprite_list('Pause')[0].alpha = 0
-                self.scene.get_sprite_list('Pause')[1].alpha = 0
-                self.scene.get_sprite_list('Pause')[2].alpha = 0
-                character_selection_view = character_selection.CharacterSelection()
-                character_selection_view.setup()
-                # window.show_view(menu_view)
-                self.clear()
+    # def on_mouse_press(self, x, y, button, key_modifiers):
+    #     characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
+    #     print(self.scene.sprite_lists)
+    #     if len(characters) > 0:
+    #         if self.scene.get_sprite_list('Pause')[2] in characters:
+    #             print("RESET")
+    #             self.showPause  =  False
+    #             self.scene.get_sprite_list('Pause')[0].alpha = 0
+    #             self.scene.get_sprite_list('Pause')[1].alpha = 0
+    #             self.scene.get_sprite_list('Pause')[2].alpha = 0
+    #             character_selection_view = character_selection.CharacterSelection()
+    #             character_selection_view.setup()
+    #             # window.show_view(menu_view)
+    #             self.clear()
 
-                self.window.show_view(character_selection_view)
-                arcade.run()
-            if self.scene.get_sprite_list('Pause')[1] in characters:
-                print("Continue")
-                self.scene.get_sprite_list('Pause')[0].alpha = 0
-                self.scene.get_sprite_list('Pause')[1].alpha = 0
-                self.scene.get_sprite_list('Pause')[2].alpha = 0
-                self.showPause  =  False
+    #             self.window.show_view(character_selection_view)
+    #             arcade.run()
+    #         if self.scene.get_sprite_list('Pause')[1] in characters:
+    #             print("Continue")
+    #             self.scene.get_sprite_list('Pause')[0].alpha = 0
+    #             self.scene.get_sprite_list('Pause')[1].alpha = 0
+    #             self.scene.get_sprite_list('Pause')[2].alpha = 0
+    #             self.showPause  =  False
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -573,7 +576,7 @@ class GameView(arcade.View):
 
 
     def on_update(self, delta_time):
-        print(self.player_sprite.center_x, self.player_sprite.center_y)
+        # print(self.player_sprite.center_x, self.player_sprite.center_y)
         """Movement and game logic"""
 
         # Move the player with the physics engine
