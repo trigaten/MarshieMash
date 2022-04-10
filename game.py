@@ -22,6 +22,7 @@ import arcade
 from entity import Enemy, BurntOne
 from entity import Player
 import math
+import random
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
@@ -181,15 +182,47 @@ class GameView(arcade.View):
         self.scene.add_sprite("Player", self.player_sprite)
 
 
-
+        coinCoords = [
+                (364, 260),
+                (393.0, 735.75),
+                (1252.0, 858.75),
+                (3062.0, 849.75),
+                (4883.0, 1080.5),
+                (5589.0, 1090.75),
+                (6291.0, 1057.75),
+                (7926.0, 2014.75),
+                (10326.0, 1681.0)]
+        cool_sponsor_logos = [
+        "assets/sponsors/1517.png",
+        "assets/sponsors/Appian.png",
+        "assets/sponsors/Bloomberg.png",
+        "assets/sponsors/BlueHalo.png",
+        "assets/sponsors/CockroachLabs.png",
+        "assets/sponsors/ionq.png",
+        "assets/sponsors/IBMQuant.png",
+        "assets/sponsors/M&T.png",
+        "assets/sponsors/SoKat.png",
+        "assets/sponsors/TwoSix.png",
+        "assets/sponsors/Visionist.png",
+        "assets/sponsors/Costar.png",
+        "assets/sponsors/LTS.png",
+        ]
+        sponsors = random.choices(cool_sponsor_logos,k=len(coinCoords))
         # Use a loop to place some coins for our character to pick up
-        for x in range(128, 1250, 256):
-            coin = arcade.Sprite(":resources:images/items/coinGold.png", COIN_SCALING)
-            coin.center_x = x
-            coin.center_y = 96
+        for x in range(len(coinCoords)):
+            coin = arcade.Sprite(sponsors[x], COIN_SCALING/5)
+            coin.center_x = coinCoords[x][0]
+            coin.center_y = coinCoords[x][1]
             self.scene.add_sprite("Coins", coin)
 
-        inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
+        inGameCoords = [
+         (224, 226),
+         (1860, 218),
+         (3531, 427.25),
+         (5112, 806),
+         (6890, 486),
+         (9133, 1551),
+         (11533, 808)]
 
         for i in range(7):
             fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
@@ -356,7 +389,7 @@ class GameView(arcade.View):
 
 
         self.coffeeAlertSprite =  arcade.Sprite("assets/CoffeeBreak.png", scale = 0.4, image_x= 0, image_y=0,
-                                        image_width=500, image_height=123)
+                                        image_width=520, image_height=123)
         self.background_music = arcade.load_sound("assets/sounds/campfire.mp3")
         self.positivesound = arcade.load_sound("assets/sounds/positivesound.mp3")
         self.coffeeAlertSprite.center_x = screen_center_x
@@ -574,16 +607,8 @@ class GameView(arcade.View):
 
                 self.coffeeCounter = self.coffeeCounter + 1
                 self.scene.get_sprite_list('coffeeAlert')[0].alpha = 255
-
                 arcade.play_sound(self.positivesound, looping= False)
 
-
-            if (self.coffeeCounter > 0):
-                self.coffeeCounter = self.coffeeCounter + 1
-            if (self.coffeeCounter > 20):
-                self.coffeeCounter = 0
-            if (self.coffeeCounter == 0):
-                self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
 
 
 
@@ -597,9 +622,14 @@ class GameView(arcade.View):
             # self.window.show_view(gameview)
             # print('here')
         # Position the camera
-        self.center_camera_to_player()
-        print('(' +  str(self.player_sprite.center_x) + ', ' + str(self.player_sprite.center_y) + ')')
+        if (self.scene.get_sprite_list('coffeeAlert')[0].alpha != 0):
+            self.coffeeCounter = self.coffeeCounter + 1
+        if (self.coffeeCounter > 20):
+            self.coffeeCounter = 0
+            self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
 
+        print(self.scene.get_sprite_list('coffeeAlert')[0].alpha)
+        self.center_camera_to_player()
 
         # reset on fall off map
         if self.player_sprite.center_y < -100:
