@@ -177,6 +177,8 @@ class GameView(arcade.View):
         self.player_sprite.center_y = 96
         self.scene.add_sprite("Player", self.player_sprite)
 
+
+
         # Use a loop to place some coins for our character to pick up
         for x in range(128, 1250, 256):
             coin = arcade.Sprite(":resources:images/items/coinGold.png", COIN_SCALING)
@@ -194,6 +196,25 @@ class GameView(arcade.View):
             self.scene.add_sprite('Fire', fire)
         # inGameCoords.reverse()
         self.inGameCoords = inGameCoords
+
+        map = arcade.Sprite("assets/MAP.PNG", 0.4)
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera.viewport_height / 2
+        )
+        if screen_center_x < 0:
+            screen_center_x = 0
+        if screen_center_y < 0:
+            screen_center_y = 0
+        player_centered = screen_center_x, screen_center_y
+
+        map.center_x = screen_center_x
+        map.center_y = screen_center_y
+
+        # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
+        map.alpha = 0
+        self.scene.add_sprite('Map', map)
+        
 
         mapCoords = [(130, 280), (205, 175), (350, 440),
                             (410, 250), (615, 350), (590, 430),
@@ -215,23 +236,7 @@ class GameView(arcade.View):
 
 
         # print('HERE')
-        map = arcade.Sprite("assets/MAP.PNG", 0.4)
-        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
-        screen_center_y = self.player_sprite.center_y - (
-            self.camera.viewport_height / 2
-        )
-        if screen_center_x < 0:
-            screen_center_x = 0
-        if screen_center_y < 0:
-            screen_center_y = 0
-        player_centered = screen_center_x, screen_center_y
 
-        map.center_x = screen_center_x
-        map.center_y = screen_center_y
-
-        # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
-        map.alpha = 0
-        self.scene.add_sprite('Map', map)
 
         # Create the 'physics engine'
         # self.physics_engine = arcade.PhysicsEnginePlatformer(
