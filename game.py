@@ -713,18 +713,30 @@ class GameView(arcade.View):
         if self.player_sprite.center_y < -100:
             #GERSON
             # #print(self.firstTimeVisiting)
+            # for i in range(len(self.firstTimeVisiting)):
+            #     if self.firstTimeVisiting[i] == True:
+            #         if i > 0:
+            #             self.player_sprite.center_x = self.inGameCoords[i-1][0]
+            #             self.player_sprite.center_y = self.inGameCoords[i-1][1]
+            #             # #print(self.player_sprite.center_x)
+            #             # #print(self.player_sprite.center_y)
+            #             break
+            #         else:
+            #             self.player_sprite.center_x = 64
+            #             self.player_sprite.center_y = 200
+            #             break
+
+            found = False
             for i in range(len(self.firstTimeVisiting)):
-                if self.firstTimeVisiting[i] == True:
-                    if i > 0:
-                        self.player_sprite.center_x = self.inGameCoords[i-1][0]
-                        self.player_sprite.center_y = self.inGameCoords[i-1][1]
-                        # #print(self.player_sprite.center_x)
-                        # #print(self.player_sprite.center_y)
-                        break
-                    else:
-                        self.player_sprite.center_x = 64
-                        self.player_sprite.center_y = 200
-                        break
+                if self.firstTimeVisiting[6-i] == False:
+                    self.player_sprite.center_x = self.inGameCoords[6-i][0]
+                    self.player_sprite.center_y = self.inGameCoords[6-i][1]
+                    found = True
+                    break
+
+            if not found:
+                self.player_sprite.center_x = 64
+                self.player_sprite.center_y = 200
 
         ### BULLET STUFF
         if self.can_shoot:
