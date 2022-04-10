@@ -9,7 +9,7 @@
  </layer>
  <layer id="2" name="background" width="300" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt3aENwzAQBVBLbkh4SUs6SkfLKBmlo5UUNiD+Sg7kPcnMX3eGlixfawAAAAAAAAAAAAAA5+mtrTv3v47pBAAAAAAAAMb06gYAAAAYVnWne2bZJch+gux7NAsAAAAAAABch/9kAADgHD1419eD94RVdask5wXYcq9uAAAAAAAAAADYZa5uALis228B8N+jugEAgIMkMxR6MMugqu4U1J2KzpvMbghnRixBdpj/ZNjyBQsQClo=
+   eJzt3bENwjAUBFBLJg09DTSMwmgZhVEYjQJKKOJT8ol4T0qXk7/TRbJ8rQEAAAAAAAAAAAAAbKe3dl/4/nWdSQAAAAAAAGBMrx4AAACAYVX/dJcsOwfZR5C9jWbXFn7P3WUBAAAAAADgl7lPBgAAttGDc309OE9YtW6VZL8A35yqBwAAAAAAAAAAFjlWDwD8rcP7AeCzc/UAAAArSToUetBlULXuFKw7Fe036W4IOyPmIDts7ftk9tgZoW/i5Qm/dgsy
   </data>
  </layer>
  <layer id="6" name="midground" width="300" height="40" opacity="0.82">
