@@ -238,23 +238,7 @@ class GameView(arcade.View):
         # inGameCoords.reverse()
         self.inGameCoords = inGameCoords
 
-        map = arcade.Sprite("assets/MAP.PNG", 0.4)
-        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
-        screen_center_y = self.player_sprite.center_y - (
-            self.camera.viewport_height / 2
-        )
-        if screen_center_x < 0:
-            screen_center_x = 0
-        if screen_center_y < 0:
-            screen_center_y = 0
-        player_centered = screen_center_x, screen_center_y
 
-        map.center_x = screen_center_x
-        map.center_y = screen_center_y
-
-        # #print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
-        map.alpha = 0
-        self.scene.add_sprite('Map', map)
 
 
         mapCoords = [(130, 280), (205, 175), (350, 440),
@@ -309,7 +293,8 @@ class GameView(arcade.View):
         self.shoot_timer = 0
         self.shoot_pressed = False
 
-        enemy_locs = [(384.0, 158.0),(1810.0, 214.75),(849, 306),(2342, 485),(2757, 352),(4217, 741),(7744, 1832),(10889, 1529),(12457, 1701)]
+        enemy_locs = [(1810.0, 214.75),(849, 306),(2342, 485),(2757, 352),(4217, 741),(7744, 1832),(10889, 1529),(12457, 1701)]
+        # enemy_locs = [(384.0, 158.0),(1810.0, 214.75),(849, 306),(2342, 485),(2757, 352),(4217, 741),(7744, 1832),(10889, 1529),(12457, 1701)]
         # enemies to add
         for loc in enemy_locs:
             enemy = Enemy("assets/enemy.png", 0.2)
@@ -340,7 +325,7 @@ class GameView(arcade.View):
 
             enemy = Enemy("assets/enemy.png", 0.2)
             enemy.center_x = math.floor(
-                x1/2#cartesian[0] #* TILE_SCALING * self.tile_map.tile_width * 0.5
+                (x1+10)/2#cartesian[0] #* TILE_SCALING * self.tile_map.tile_width * 0.5
             )
             enemy.center_y = math.floor(
                 y1/(-11)
@@ -352,7 +337,7 @@ class GameView(arcade.View):
                 enemy.boundary_right = my_object.properties["boundary_right"]
             if "change_x" in my_object.properties:
                 enemy.change_x = my_object.properties["change_x"]
-
+            
             self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
 
         pause_background = arcade.Sprite("assets/scroll.png", scale = 1, image_x= 0, image_y=0,
@@ -409,6 +394,24 @@ class GameView(arcade.View):
         self.scene.add_sprite("coffeeAlert", self.coffeeAlertSprite)
         self.coffeeCounter = 0
         self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
+
+        map = arcade.Sprite("assets/MAP.PNG", 0.4)
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera.viewport_height / 2
+        )
+        if screen_center_x < 0:
+            screen_center_x = 0
+        if screen_center_y < 0:
+            screen_center_y = 0
+        player_centered = screen_center_x, screen_center_y
+
+        map.center_x = screen_center_x
+        map.center_y = screen_center_y
+
+        # #print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
+        map.alpha = 0
+        self.scene.add_sprite('Map', map)
 
     def on_draw(self):
         """Render the screen."""
