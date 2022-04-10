@@ -19,7 +19,7 @@ python -m arcade.examples.view_instructions_and_game_over.py
 """
 from re import L
 import arcade
-from entity import Enemy
+from entity import Enemy, BurntOne
 from entity import Player
 import math
 # Constants
@@ -177,7 +177,7 @@ class GameView(arcade.View):
         player_types = {'Blue': 'assets/marshie_blue.png', 'Red': 'assets/marshie_red.png', 'Green': 'assets/marshie_green.png'}
         self.player_sprite = Player(player_types[self.player_type], 0.02)
         self.player_sprite.center_x = 64
-        self.player_sprite.center_y = 96
+        self.player_sprite.center_y = 200
         self.scene.add_sprite("Player", self.player_sprite)
 
 
@@ -189,13 +189,12 @@ class GameView(arcade.View):
             coin.center_y = 96
             self.scene.add_sprite("Coins", coin)
 
-        inGameCoords = []
+        inGameCoords = [(224, 226), (1860, 218), (3531, 427.25), (5112, 806), (6890, 486), (9133, 1551), (11533, 808)]
 
-        for i in range(200, TOTALDISTANCE-200, (TOTALDISTANCE-200) // 7):
+        for i in range(7):
             fire = arcade.Sprite('assets/bitcamplogo_nolit.png', 0.15)
-            fire.center_x = i
-            fire.center_y = 100
-            inGameCoords.append((i, 100))
+            fire.center_x = inGameCoords[i][0]
+            fire.center_y = inGameCoords[i][1]
             self.scene.add_sprite('Fire', fire)
         # inGameCoords.reverse()
         self.inGameCoords = inGameCoords
@@ -267,6 +266,16 @@ class GameView(arcade.View):
         self.shoot_timer = 0
         self.shoot_pressed = False
 
+        enemy_locs = [(384.0, 258.0)]
+        for loc in enemy_locs:
+            enemy = Enemy("assets/enemy.png", 0.3)
+            x1, y1 = loc
+            enemy.center_x = x1
+            enemy.center_y = y1
+            self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
+        burnny = BurntOne("assets/big_boi.png", 0.5)
+        burnny.center_x, burnny.center_y = burnny.start_pos
+        self.scene.add_sprite(LAYER_NAME_ENEMIES, burnny)
         try:
                     # -- Enemies
             enemies_layer = self.tile_map.object_lists[LAYER_NAME_ENEMIES]
@@ -281,15 +290,24 @@ class GameView(arcade.View):
                     x1, y1
                 )
 
-                enemy = Enemy("assets/enemy.png", 0.6)
-                enemy.center_x = my_object.shape[0]
-
-                enemy.center_y = 3850 + cartesian[1]
-
+                enemy = Enemy("assets/enemy.png", 0.2)
+                enemy.center_x = math.floor(
+                    x1/2#cartesian[0] #* TILE_SCALING * self.tile_map.tile_width * 0.5
+                )
+                enemy.center_y = math.floor(
+                    y1/(-11)
+                    # abs((cartesian[1] + 1) * (self.tile_map.tile_height * TILE_SCALING)) * 0.5
+                )
+#                 (1783.0, 218.25)
+# (1783.0, 218.25)
+                print("LLLLL")
+                print(my_object.shape)
                 print(enemy.center_x, enemy.center_y)
+                print(x1, y1)
                 print(self.player_sprite.center_x, self.player_sprite.center_y)
                 print(cartesian[0],  TILE_SCALING, self.tile_map.tile_width)
                 print(cartesian)
+                # (264.0, 226.25)
                 # exit()
                 if "boundary_left" in my_object.properties:
                     enemy.boundary_left = my_object.properties["boundary_left"]
@@ -297,6 +315,8 @@ class GameView(arcade.View):
                     enemy.boundary_right = my_object.properties["boundary_right"]
                 if "change_x" in my_object.properties:
                     enemy.change_x = my_object.properties["change_x"]
+
+                print("DDDDDDDD", my_object.properties)
                 self.scene.add_sprite(LAYER_NAME_ENEMIES, enemy)
         except Exception as e:
             raise e
@@ -335,15 +355,15 @@ class GameView(arcade.View):
         self.scene.add_sprite('Pause', reset_button)
 
 
-        self.coffeeAlertSprite =  arcade.Sprite("assets/CoffeeBreak.png", scale = 0.5, image_x= 0, image_y=2,
-                                        image_width=188, image_height=90)
+        self.coffeeAlertSprite =  arcade.Sprite("assets/CoffeeBreak.png", scale = 0.4, image_x= 0, image_y=0,
+                                        image_width=500, image_height=123)
         self.background_music = arcade.load_sound("assets/sounds/campfire.mp3")
         self.positivesound = arcade.load_sound("assets/sounds/positivesound.mp3")
-        arcade.play_sound(background_music, looping= True)
         self.coffeeAlertSprite.center_x = screen_center_x
         self.coffeeAlertSprite.center_y = screen_center_y
         self.scene.add_sprite("coffeeAlert", self.coffeeAlertSprite)
         self.coffeeCounter = 0
+        self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
 
     def on_draw(self):
         """Render the screen."""
@@ -425,28 +445,7 @@ class GameView(arcade.View):
             self.scene.get_sprite_list('Pause')[2].alpha = 0
             self.showPause = False
 
-    def on_mouse_press(self, x, y, button, key_modifiers):
-        characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
-        if len(characters) > 0:
-            if self.scene.get_sprite_list('Pause')[2] in characters:
-                print("RESET")
-                self.showPause  =  False
-                self.scene.get_sprite_list('Pause')[0].alpha = 0
-                self.scene.get_sprite_list('Pause')[1].alpha = 0
-                self.scene.get_sprite_list('Pause')[2].alpha = 0
-                character_selection_view = character_selection.CharacterSelection()
-                character_selection_view.setup()
-                # window.show_view(menu_view)
-                self.clear()
 
-                self.window.show_view(character_selection_view)
-                arcade.run()
-            if self.scene.get_sprite_list('Pause')[1] in characters:
-                print("Continue")
-                self.scene.get_sprite_list('Pause')[0].alpha = 0
-                self.scene.get_sprite_list('Pause')[1].alpha = 0
-                self.scene.get_sprite_list('Pause')[2].alpha = 0
-                self.showPause  =  False
 
 
 
@@ -468,6 +467,29 @@ class GameView(arcade.View):
             for i in range(len(self.scene.get_sprite_list('MapFire'))):
                 self.scene.get_sprite_list('MapFire')[i].visible =False
 
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
+        print(self.scene.sprite_lists)
+        if len(characters) > 0:
+            if self.scene.get_sprite_list('Pause')[2] in characters:
+                print("RESET")
+                self.showPause  =  False
+                self.scene.get_sprite_list('Pause')[0].alpha = 0
+                self.scene.get_sprite_list('Pause')[1].alpha = 0
+                self.scene.get_sprite_list('Pause')[2].alpha = 0
+                character_selection_view = character_selection.CharacterSelection()
+                character_selection_view.setup()
+                # window.show_view(menu_view)
+                self.clear()
+
+                self.window.show_view(character_selection_view)
+                arcade.run()
+            if self.scene.get_sprite_list('Pause')[1] in characters:
+                print("Continue")
+                self.scene.get_sprite_list('Pause')[0].alpha = 0
+                self.scene.get_sprite_list('Pause')[1].alpha = 0
+                self.scene.get_sprite_list('Pause')[2].alpha = 0
+                self.showPause  =  False
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -483,6 +505,8 @@ class GameView(arcade.View):
         self.camera.move_to(player_centered)
         self.scene.get_sprite_list('Pause')[0].center_x = screen_center_x + 400
         self.scene.get_sprite_list('Pause')[0].center_y = screen_center_y + 300
+        self.coffeeAlertSprite.center_x  = screen_center_x + 400
+        self.coffeeAlertSprite.center_y  = screen_center_y + 300
 
         self.scene.get_sprite_list('Pause')[1].center_x = screen_center_x + 500
         self.scene.get_sprite_list('Pause')[2].center_x = screen_center_x + 300
@@ -547,14 +571,16 @@ class GameView(arcade.View):
                 # self.scene.add_sprite('MapFire', fire)
                 self.firstTimeVisiting[idx] = False
                 # self.campfireTracker += 1
-                arcade.play_sound(positivesound, looping= True)
 
-                self.coffeeCounter = 1
-            if (coffeeCounter > 0):
                 self.coffeeCounter = self.coffeeCounter + 1
                 self.scene.get_sprite_list('coffeeAlert')[0].alpha = 255
 
-            if (self.coffeeCounter > 100):
+                arcade.play_sound(self.positivesound, looping= False)
+
+
+            if (self.coffeeCounter > 0):
+                self.coffeeCounter = self.coffeeCounter + 1
+            if (self.coffeeCounter > 20):
                 self.coffeeCounter = 0
             if (self.coffeeCounter == 0):
                 self.scene.get_sprite_list('coffeeAlert')[0].alpha = 0
@@ -572,13 +598,13 @@ class GameView(arcade.View):
             # print('here')
         # Position the camera
         self.center_camera_to_player()
-
+        print('(' +  str(self.player_sprite.center_x) + ', ' + str(self.player_sprite.center_y) + ')')
 
 
         # reset on fall off map
         if self.player_sprite.center_y < -100:
             self.player_sprite.center_x = 64
-            self.player_sprite.center_y = 96
+            self.player_sprite.center_y = 200
 
         ### BULLET STUFF
         if self.can_shoot:
@@ -661,9 +687,10 @@ class GameView(arcade.View):
                 bullet,
                 [
                     self.scene[LAYER_NAME_ENEMIES],
+                    self.scene[LAYER_NAME_PLATFORMS],
                 ],
             )
-
+# (1810.0, 214.75)/
             if hit_list:
                 bullet.remove_from_sprite_lists()
 

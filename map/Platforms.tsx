@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.8" tiledversion="1.8.4" name="Platforms" tilewidth="3086" tileheight="3703" tilecount="24" columns="0">
+<tileset version="1.8" tiledversion="1.8.4" name="Platforms" tilewidth="3086" tileheight="3703" tilecount="26" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="562" height="378" source="../assets/apply.png"/>
@@ -72,5 +72,11 @@
  </tile>
  <tile id="24">
   <image width="2970" height="3355" source="../assets/marshie_red.png"/>
+ </tile>
+ <tile id="25">
+  <image width="2080" height="280" source="../assets/TEXT.png"/>
+ </tile>
+ <tile id="26">
+  <image width="1354" height="130" source="../assets/super-mario-bros-6.png"/>
  </tile>
 </tileset>
