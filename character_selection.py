@@ -17,6 +17,7 @@ python -m arcade.examples.view_instructions_and_game_over.py
 import arcade
 
 from game import GameView
+
 # Constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -192,10 +193,10 @@ class CharacterSelection(arcade.View):
 
         self.blue.center_x = 140
         self.blue.center_y = 265
-        
+
         self.red.center_x = 410
         self.red.center_y = 265
-        
+
         self.green.center_x = 660
         self.green.center_y = 260
 

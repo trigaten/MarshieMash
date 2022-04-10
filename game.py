@@ -58,12 +58,12 @@ PLAYER_JUMP_SPEED = 20
 # Constants used to track if the player is facing left or right
 RIGHT_FACING = 0
 LEFT_FACING = 1
-import arcade
 import random
 import os
 import random
 import math
-import arcade
+
+import character_selection
 
 SPRITE_SCALING = 0.5
 
@@ -102,16 +102,19 @@ class GameView(arcade.View):
 
         # Separate variable that holds the player sprite
         self.player_sprite = None
-        
+
         self.player_type = playerType
         print('in init, playerType: ' + str(self.player_type))
+
+
+
         # Our physics engine
         self.physics_engine = None
 
         # A Camera that can be used for scrolling the screen
         self.camera = None
 
-
+        self.showPause = False
         # A Camera that can be used to draw GUI elements
 
         self.gui_camera = None
@@ -127,6 +130,7 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
+
         map_name = ":resources:tiled_maps/map.json"
         #"/Users/sander/map.tmx"
         layer_options = {
@@ -202,6 +206,37 @@ class GameView(arcade.View):
         self.shoot_pressed = False
 
 
+        pause_background = arcade.Sprite("assets/scroll.png", scale = 1, image_x= 0, image_y=0,
+        image_width=860, image_height=673)
+
+        continue_button = arcade.Sprite("assets/ContinueButton.png", scale = 0.5, image_x= 0, image_y=2,
+                image_width=250, image_height=90)
+        reset_button = arcade.Sprite("assets/ResetButton.png", scale = 0.5, image_x= 0, image_y=2,
+                                image_width=188, image_height=90)
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera.viewport_height / 2
+        )
+        if screen_center_x < 0:
+            screen_center_x = 0
+        if screen_center_y < 0:
+            screen_center_y = 0
+        player_centered = screen_center_x, screen_center_y
+        pause_background.center_x = screen_center_x
+        pause_background.center_y = screen_center_y
+        continue_button.center_x = screen_center_x + 100
+        reset_button.center_x = screen_center_x - 100
+        continue_button.center_y = screen_center_y - 200
+        reset_button.center_y = screen_center_y - 200
+
+        # print('map x,y: ' + str(map.center_x) + ', ' + str(map.center_y))
+        pause_background.alpha = 0
+        continue_button.alpha = 0
+        reset_button.alpha = 0
+
+        self.scene.add_sprite('Pause', pause_background)
+        self.scene.add_sprite('Pause', continue_button)
+        self.scene.add_sprite('Pause', reset_button)
 
     def on_draw(self):
         """Render the screen."""
@@ -241,7 +276,7 @@ class GameView(arcade.View):
             18,
 
         )
-        
+
         # text_drawer(self, "The journeys of 1000 hackathons begins with 7 steps", 400, 400)
 
 
@@ -264,6 +299,44 @@ class GameView(arcade.View):
         if key == arcade.key.Q:
             self.shoot_pressed = True
 
+        if key == arcade.key.P and not self.showPause:
+            self.scene.get_sprite_list('Pause')[0].alpha = 235
+            self.scene.get_sprite_list('Pause')[1].alpha = 235
+            self.scene.get_sprite_list('Pause')[2].alpha = 235
+            self.showPause = True
+        elif key == arcade.key.P:
+            self.scene.get_sprite_list('Pause')[0].alpha = 0
+            self.scene.get_sprite_list('Pause')[1].alpha = 0
+            self.scene.get_sprite_list('Pause')[2].alpha = 0
+            self.showPause = False
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        characters = arcade.get_sprites_at_point((x,y), self.scene.get_sprite_list('Pause'))
+        if self.showPause and (len(characters)) > 0:
+            if self.scene.get_sprite_list('Pause')[2] in characters:
+                print("RESET")
+                self.showPause  =  False
+                self.scene.get_sprite_list('Pause')[0].alpha = 0
+                self.scene.get_sprite_list('Pause')[1].alpha = 0
+                self.scene.get_sprite_list('Pause')[2].alpha = 0
+                character_selection_view = character_selection.CharacterSelection()
+                character_selection_view.setup()
+                # window.show_view(menu_view)
+                self.clear()
+
+                self.window.show_view(character_selection_view)
+                arcade.run()
+            if self.scene.get_sprite_list('Pause')[1] in characters:
+                print("Continue")
+                self.scene.get_sprite_list('Pause')[0].alpha = 0
+                self.scene.get_sprite_list('Pause')[1].alpha = 0
+                self.scene.get_sprite_list('Pause')[2].alpha = 0
+                self.showPause  =  False
+
+
+
+
+
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
 
@@ -274,6 +347,7 @@ class GameView(arcade.View):
 
         if key == arcade.key.Q:
             self.shoot_pressed = False
+
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -287,6 +361,13 @@ class GameView(arcade.View):
         player_centered = screen_center_x, screen_center_y
 
         self.camera.move_to(player_centered)
+        self.scene.get_sprite_list('Pause')[0].center_x = screen_center_x + 400
+        self.scene.get_sprite_list('Pause')[0].center_y = screen_center_y + 300
+
+        self.scene.get_sprite_list('Pause')[1].center_x = screen_center_x + 500
+        self.scene.get_sprite_list('Pause')[2].center_x = screen_center_x + 300
+        self.scene.get_sprite_list('Pause')[1].center_y = screen_center_y + 150
+        self.scene.get_sprite_list('Pause')[2].center_y = screen_center_y + 150
 
     def on_update(self, delta_time):
         """Movement and game logic"""
@@ -322,7 +403,7 @@ class GameView(arcade.View):
             if self.shoot_pressed:
                 # SANDER BULLET CODE
                 bullet_image = None
-               
+
                 if self.player_sprite.player_color == "blue":
                     bullet_scaling = SPRITE_SCALING_LASER/10
                     bullet_image = "assets/owl.png"
@@ -392,6 +473,7 @@ class GameView(arcade.View):
                 > (self.tile_map.width * self.tile_map.tile_width) * TILE_SCALING
             ):
                 bullet.remove_from_sprite_lists()
+
 
 
 class GameOverView(arcade.View):
