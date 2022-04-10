@@ -153,7 +153,7 @@ class BurntOne(Entity):
         self.max_x = 15265.0
 
         self.start_pos = (13817.0, 940.0)
-        self.x_delta = 3
+        self.x_delta = 6
         self.spawn_wait = 0
 
     def update(self):
