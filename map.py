@@ -32,6 +32,7 @@ class MenuView(arcade.View):
     def on_draw(self):
         self.clear()
 
+
         self.background = arcade.load_texture("assets/map.PNG", x=25, y=0, width=2500, height=1264)
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,

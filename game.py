@@ -130,9 +130,8 @@ class GameView(arcade.View):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
-        #map_name = "map/untitled.tmx"
-        map_name = ":resources:tiled_maps/map.json"
 
+        map_name = ":resources:tiled_maps/map.json"
         #"/Users/sander/map.tmx"
         layer_options = {
             "Platforms": {
