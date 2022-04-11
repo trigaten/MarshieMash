@@ -15,4 +15,4 @@ Your friends have been captured by the Evil Burnt Mellows! To save them, you mus
 4) Enjoy!
 
 ## Acknowledgments
-This project was created for the Bitcamp 2022 Hackathon.
+This project was created for the Bitcamp 2022 Hackathon and won Best "Bitcamp" Hack.
